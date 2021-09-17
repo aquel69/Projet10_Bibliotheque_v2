@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="page employe">
+        <meta name="author" content="alardon">
+        <title>Accueil</title>
+
+        <!-- police google-->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&family=Tangerine:wght@700&display=swap" rel="stylesheet">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/styleEmploye.css}">
+    </head>
+    <body>
+        <header th:insert="Header :: header(codeRole = ${codeRole}, utilisateurAuthentifie = ${utilisateurAuthentifie})"></header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 mt-4 mb-5">
+                    <h1 class="text-center text-light">Gestion des Emprunts</h1>
+                </div>
+            </div>
+            <div class="row justify-content-between">
+                <div class="offset-1"></div>
+                <div class="col-sm-12 col-md-8 col-lg-5">
+                    <div id="jg" class="jumbotron p-3 p-md-4 text-white rounded">
+                        <div class="bordure-titre-gauche col-12 pb-2">
+                            <h1 class="text-center mt-1">Emprunt</h1>
+                        </div>
+                        <div class="row centrage align-items-center">
+                            <div class="col-12">
+                                <form th:action="@{/Emprunt}" th:object="${abonne}" method="post" >
+                                    <div class="form-outline">
+                                        <input type="text" th:field="*{numeroAbonne}" id="numeroAbonne" class="form-control" />
+                                        <label class="form-label" for="numeroAbonne">Numéro de l'abonné</label>
+                                    </div>
+                                    <!-- Password input -->
+                                    <div th:object="${ouvrage}" class="form-outline mb-4">
+                                        <input type="text" th:field="*{codeBibliotheque}" id="codeBibliotheque" class="form-control" />
+                                        <label class="form-label" for="codeBibliotheque">Code de l'ouvrage</label>
+                                    </div>
+                                    <div th:if="${message != null}">
+                                        <div class="alert alert-warning alert-dismissible my-3" role="alert" >
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span></button>
+                                            <span th:text="${message}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <button class="btn btn-lg btn-primary btn-block " type="submit">Valider</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-8 col-lg-5">
+                    <div id="jd" class="jumbotron p-3 p-md-4 text-white rounded">
+                        <div class="bordure-titre-droite col-12 pb-2">
+                            <h1 class="text-center mt-1">Rendu</h1>
+                        </div>
+                        <div class="row centrage align-items-center">
+                            <div class="col-12">
+                                <form th:action="@{/Restitution}" th:object="${abonne}" method="post" >
+                                    <div class="form-outline">
+                                        <input type="text" th:field="*{numeroAbonne}" id="numeroAbonneRestitution" class="form-control" />
+                                        <label class="form-label labelRestitution" for="numeroAbonneRestitution">Numéro de l'abonné</label>
+                                    </div>
+                                    <!-- Password input -->
+                                    <div th:object="${ouvrage}" class="form-outline mb-4">
+                                        <input type="text" th:field="*{codeBibliotheque}" id="codeBibliothequeRestitution" class="form-control" />
+                                        <label class="form-label labelRestitution" for="codeBibliothequeRestitution">Code de l'ouvrage</label>
+                                    </div>
+                                    <div th:if="${messageRestitution != null}">
+                                        <div class="alert alert-warning alert-dismissible my-3" role="alert" >
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span></button>
+                                            <span th:text="${messageRestitution}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <button class="btn btn-lg btn-primary btn-block " type="submit">Valider</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="offset-1"></div>
+            </div>
+        </div>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="page liste livre">
+        <meta name="author" content="alardon">
+        <title>Accueil</title>
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Roboto&family=Signika:wght@500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/styleCatalogue.css}">
+    </head>
+    <body>
+        <span th:insert="Header :: header(codeRole = ${codeRole}, utilisateurAuthentifie = ${utilisateurAuthentifie})"></span>
+        <div id="containeur_detail" class="container-fluid">
+            <div th:insert="FenetreModal.html :: fenetre(abonnePret = ${abonnePret})"></div>
+            <div class="row">
+                <div class="col-5">
+                    <form th:action="@{|/Catalogue/0/8|}" method="post">
+                        <div id="barre-recherche" class="p-1 bg-light rounded rounded-pill shadow-sm mb-4 ml-3">
+                            <div class="input-group">
+                                <input th:value="${recherche}" name="recherche" type="search" placeholder="Recherche" aria-describedby="button-addon1" class="form-control border-0 bg-light">
+                                <div class="input-group-append">
+                                    <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-7 col-sm-12  mb-5">
+                    <h1 id="titre_catalogue" class="text-light mt-5 mt-md-0 ml-5">Catalogue</h1>
+                </div>
+            </div>
+            <div class="row px-3">
+                <div class="col-lg-6 col-md-12">
+                    <div th:each="livre, inter : ${listeLivresPagination}" >
+                        <div class="container" th:if="${inter.count < 5}"><a href="Livre/Detail.html" th:href="@{/Detail/{id}(id=${livre.getIdLivre()})}"></a>
+                            <div class="row">
+                                <div id="jumbotron_catalogue_1" class="col-12 jumbotron hoverable p-4 ">
+                                    <div class="row">
+                                        <div class="col-2 d-inline">
+                                            <img th:src="@{/photoOuvrage/{image}(image=${livre.getMoyennePhotoCouverture()})}">
+                                        </div>
+                                        <div class="col-10">
+                                            <div class="border-bottom border-secondary mb-3">
+                                                <h4 class="titre_livre text-center"><a class="lien_livre" th:text="${livre.getTitre()}" href="Livre/Detail.html" th:href="@{/Detail/{id}(id=${livre.getIdLivre()})}"></a></h4>
+                                            </div>
+                                            <div>
+                                                <h6 class="descriptif d-inline">Auteur : </h6>
+                                                <div class="d-inline" th:each="auteur, inter : ${livre.getAuteurs()}">
+                                                    <p class="d-inline" th:text="${auteur.getNom()}"> </p>
+                                                    <p class="d-inline" th:text="${auteur.getPrenom()}">  </p>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h6 class="descriptif d-inline">Genre : </h6>
+                                                <div class="d-inline" th:each="genre, inter : ${livre.getGenres()}">
+                                                    <p class="d-inline" th:text="${genre.getNom()}"> </p>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h6 class="descriptif d-inline">Langue : </h6>
+                                                <p class="d-inline" th:text="${livre.getLangue()}"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div th:each="livre, inter : ${listeLivresPagination}" >
+                        <div class="container" th:if="${inter.count > 4} and ${inter.count < 9}">
+                            <div class="row">
+                                <div id="jumbotron_catalogue_2" class="col-12 jumbotron hoverable p-4 ">
+                                    <div class="row">
+                                        <div class="col-2 d-inline">
+                                            <img th:src="@{/photoOuvrage/{image}(image=${livre.getMoyennePhotoCouverture()})}">
+                                        </div>
+                                        <div class="col-10">
+                                            <div class="border-bottom border-secondary mb-3">
+                                                <h4 class="titre_livre text-center"><a class="lien_livre" th:text="${livre.getTitre()}" href="Livre/Detail.html" th:href="@{/Detail/{id}(id=${livre.getIdLivre()})}"></a></h4>
+                                            </div>
+                                            <div>
+                                                <h6 class="descriptif d-inline">Auteur : </h6>
+                                                <div class="d-inline" th:each="auteur, inter : ${livre.getAuteurs()}">
+                                                    <p class="d-inline" th:text="${auteur.getNom()}"> </p>
+                                                    <p class="d-inline" th:text="${auteur.getPrenom()}">  </p>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h6 class="descriptif d-inline">Genre : </h6>
+                                                <div class="d-inline" th:each="genre, inter : ${livre.getGenres()}">
+                                                    <p class="d-inline" th:text="${genre.getNom()}"> </p>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h6 class="descriptif d-inline">Langue : </h6>
+                                                <p class="d-inline" th:text="${livre.getLangue()}"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class=" col-lg-12">
+                    <nav aria-label="Page navigation example">
+                        <ul th:if="${nbTotalPages > 1 }" class="ensemblePagination pagination pg-blue justify-content-center">
+
+                            <li class="page-item" th:classappend="${noPage == 0} ? disabled">
+                                <a class="page-link" th:href="@{|/Catalogue/${noPage - 1}/${nbLivresParPage}/false|}">Précédente</a>
+                            </li>
+                            <li class="page-item" th:classappend="${noPage == 0} ? disabled"><a class="page-link " th:classappend="${noPage == 0} ? text-danger" th:href="@{|/Catalogue/0/8/false|}">1</a></li>
+                            <li class="page-item" th:classappend="${noPage == 1 || nbTotalPages < 2} ? disabled"><a class="page-link" th:classappend="${noPage == 1} ? text-danger" th:href="@{|/Catalogue/1/8/false|}">2</a></li>
+                            <li class="page-item" th:classappend="${noPage == 2 || nbTotalPages < 3} ? disabled"><a class="page-link" th:classappend="${noPage == 2} ? text-danger" th:href="@{|/Catalogue/2/8/false|}">3</a></li>
+                            <li class="page-item" th:classappend="${noPage >= nbTotalPages - 1} ? disabled">
+                                <a class="page-link" th:href="@{|/Catalogue/${noPage + 1}/${nbLivresParPage}/false|}">Suivante</a>
+                            </li>
+
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+                integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                crossorigin="anonymous"></script>
+    </body>
+</html>

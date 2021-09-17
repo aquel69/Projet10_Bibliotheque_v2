@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="fenêtre">
+    <meta name="author" content="alardon">
+    <title>Fenêtre</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styleFenetre.css}">
+</head>
+<body >
+<div th:fragment="fenetre(abonnePret)" class="container-fluid fenetre mt-4 pr-5" >
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal-label">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header ">
+                    <div class="col-11"><h4 class="modal-title text-center pl-5">Mes Emprunts</h4></div>
+                    <div class="col-1"><button type="button" class="close" data-dismiss="modal">&times;</button></div>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body pt-0">
+                    <form th:action="@{/Prolongation}" th:object="${abonnePret}" method="post" class="form-inline justify-content-start">
+                                    <table  class="table table-hover table-responsive align-items-center border-bottom mb-0" th:each="abonnePret, inter : ${abonnePret}">
+                                        <thead>
+                                            <tr>
+                                                <th class="align-middle text-center" width="8%"></th>
+                                                <th class="align-middle text-center" width="28%">Titre</th>
+                                                <th class="align-middle text-center" width="10%">Bibliothèque</th>
+                                                <th class="align-middle text-center" width="24%">A rendre avant le</th>
+                                                <th class="align-middle text-center" width="18%">Statut</th>
+                                                <th class="align-middle text-center" width="12%">Prolongation</th>
+                                            </tr>
+                                        </thead>
+                                        <div th:each="ouvrage, inter2 : ${abonnePret.listeOuvrage}">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="align-middle " ><img th:src="@{/photoOuvrage/{image}(image=${ouvrage.getLivre().getPetitePhotoCouverture()})}" /></td>
+                                                    <td class="align-middle titre_livre_fenetre" ><h6 th:text="${ouvrage.getLivre().getTitre()}"></h6></td>
+                                                    <td  class="align-middle text-center" >
+                                                        <th:block th:switch="${ouvrage.getSiretBibliotheque()}">
+                                                            <h6 th:case="'18004625200177'">Bruce Wayne</h6>
+                                                            <h6 th:case="'18004625200568'">Alfred</h6>
+                                                            <h6 th:case="'18004625200356'">Robin</h6>
+                                                        </th:block>
+                                                    </td>
+                                                    <td class="align-middle text-center" ><h6 th:text="${#temporals.format(abonnePret.listePret[inter2.index].getDateDeRestitution(), 'dd-MM-yyyy')}"></h6></td>
+                                                    <td class="align-middle text-center" ><h6 th:text="${abonnePret.listePret[inter2.index].getStatut()}"></h6></td>
+                                                    <td class="align-middle text-center" ><input class="form-check-input" type="radio" th:value="${abonnePret.listePret[inter2.index].getIdPret()}" name="pretProlongation" th:disabled="${abonnePret.listePret[inter2.index].isRendu() == true || abonnePret.listePret[inter2.index].isProlongation()}"></td>
+                                                </tr>
+                                            </tbody>
+                                        </div>
+                                     </table>
+                            <div class="col-12 pt-3">
+                                <div class="col-6 mx-auto">
+                                    <button class="btn btn-lg btn-primary btn-block" type="submit">Valider</button>
+                                </div>
+                            </div>
+
+                    </form>
+
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+
+                    <button type="button"  class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="page détail livre">
+        <meta name="author" content="alardon">
+        <title>Accueil</title>
+
+        <!-- Bootstrap CSS -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Signika:wght@500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/styleDetailLivre.css}">
+    </head>
+    <body>
+        <span th:insert="Header :: header(codeRole = ${codeRole}, utilisateurAuthentifie = ${utilisateurAuthentifie})"></span>
+        <div id="containeur_detail" class="container-fluid">
+            <div th:insert="FenetreModal.html :: fenetre(abonnePret = ${abonnePret})"></div>
+            <div class="row">
+                <div class="col-12 mb-5">
+                    <h1 id="titre_detail" class="text-center mt-5 mt-md-0">Détail Du Livre</h1>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div id="div_couverture_livre" class="col-lg-3 col-md-12">
+                    <img id="couverture_livre" class="d-lg-inline d-md-block d-sm-block" th:src="@{/photoOuvrage/{image}(image=${detailLivre.getGrandePhotoCouverture()})}"}>
+                </div>
+                <div id="jumbotron_detail" class="col-lg-7 col-md-12 jumbotron hoverable p-5">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div id="titre_livre" class="col-12">
+                                    <h2 class="text-center" th:text="${detailLivre.getTitre()}"></h2>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 mt-5">
+                                    <h6 class="d-inline">Résumé : </h6>
+                                    <p class="d-inline" th:text="${detailLivre.getResume()}">
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h6 class="d-inline">Auteur : </h6>
+                                            <div class="d-inline" th:each="auteur, inter : ${auteurs}" >
+                                                <p class="d-inline" th:text="${auteur.getPrenom()}"> </p>
+                                                <p class="d-inline" th:text="${auteur.getNom()}"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h6 class="d-inline">Date de sortie / Parution : </h6>
+                                            <p class="d-inline" th:text="${#dates.format(detailLivre.getDateEdition(), 'dd-MM-yyyy')}"></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h6 class="d-inline">ISBN : </h6>
+                                            <p class="d-inline" th:text="${detailLivre.getNumISBN13()}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h6 class="d-inline">Edition : </h6>
+                                            <p class="d-inline" th:text="${detailLivre.getEditeur().getNomMaisonEdition()}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h6 class="d-inline">Nombre de pages : </h6>
+                                            <p class="d-inline" th:text="${detailLivre.getNombreDePages()}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-5" >
+                                <div class="col-12 mt-1" >
+                                    <h6 class="d-inline">Bibliothèque Bruce Wayne : </h6>
+                                    <p class="d-inline" th:text="${ouvrages[1].getNombreExemplaires()} + ' exemplaires'"></p>
+                                </div>
+                                <div class="col-12 mt-1">
+                                    <h6 class="d-inline">Bibliothèque Robin : </h6>
+                                    <p class="d-inline" th:text="${ouvrages[2].getNombreExemplaires()} + ' exemplaires'"></p>
+                                </div>
+                                <div class="col-12 mt-1">
+                                    <h6 class="d-inline">Bibliothèque Alfred : </h6>
+                                    <p class="d-inline" th:text="${ouvrages[0].getNombreExemplaires()} + ' exemplaires'"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+                integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                crossorigin="anonymous"></script>
+    </body>
+</html>

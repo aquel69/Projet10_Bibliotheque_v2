@@ -1,0 +1,59 @@
+body{
+    background-image: url("../photoSite/page_emprunt_restitution_employe.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #464646;
+    margin: 0;
+    height: 100%;
+}
+
+/*menu*/
+#bienvenue_pseudo{
+    color: #ffffff;
+}
+
+.jumbotron{
+    height: 700px;
+}
+
+#jg{
+    background-color: #a9a9a9;
+}
+
+.bordure-titre-gauche{
+    border-bottom: 1px solid #eae9e9;
+    color: white;
+}
+
+.bordure-titre-droite{
+    border-bottom: 1px solid #a9a9a9;
+    color : #646464;
+}
+
+.centrage{
+    height: 550px;
+
+}
+
+.champ-droite{
+    margin-top: 72px;
+}
+
+.labelRestitution{
+    color: #646464;
+}
+
+#titre_emprunt{
+
+}
+
+#titre_rendu{
+
+}
+
+#code_ouvrage{
+    color : #646464;
+}
+

@@ -1,0 +1,133 @@
+body{
+    background-image: url("../photoSite/accueil_abonne.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #464646;
+    margin: 0;
+    height: 100%;
+}
+
+/*menu*/
+#bienvenue_pseudo{
+ color: #ffffff;
+}
+
+/*fenêtre*/
+.titre_livre_fenetre{
+    font-size: 0.8em;
+}
+
+#table_fenetre{
+    overflow-x: auto;
+}
+
+#modal .modal-dialog .modal-content{
+    background-color: #c4dae2;
+
+}
+
+/*LIVRE*/
+/*Lien*/
+.lien_livre{
+    text-decoration:none;
+    color: black;
+}
+
+.lien_livre:hover {
+    background-color: #99a5a2;
+}
+.lien_livre:focus {
+    background-color:#555;
+}
+
+/*corps*/
+.jumbotron{
+    background-color: #5fbfb6;
+    opacity: 93%;
+}
+.table > tbody > tr:first-child > td {
+    border: none;
+}
+
+/*titre et sous-titre*/
+#titre_top_10{
+    font-family: 'Roboto', sans-serif;
+    color: white;
+}
+#titre_nouveaute{
+    font-family: 'Roboto', sans-serif;
+    color: white;
+}
+#titre_bibliotheque{
+    color: white;
+    font-size: 5em;
+    margin-top: 0.6em;
+}
+
+#titre_nom_bibliotheque{
+    color: white;
+    font-size: 5em;
+    /*font-family: 'Tangerine', cursive;*/
+}
+
+#titre_bienvenue{
+    border-bottom: solid;
+    border-top: solid;
+    padding-top: 0.23em;
+    margin-bottom: 0.70em;
+}
+/*titre bienvenue avec effet */
+.ml3 {
+    font-weight: 900;
+    font-size: 10em;
+    color: #f5f5dc;
+    margin-bottom: 0.36em;
+}
+
+
+
+@media screen and (max-width:1464px){
+    .ml3{
+        font-size: 6em;
+    }
+
+    .texteJumb{
+        font-size: 1.2em;
+    }
+    #jumbotron_nouveaute{
+        margin-top: 7em;
+    }
+}
+
+@media screen and (max-width: 992px){
+    #tableau_nouveaute_1 > tbody > tr:first-child > td {
+        border-bottom: blue;
+    }
+
+    #jumbotron_nouveaute{
+        margin-top: 0;
+    }
+}
+
+@media screen and (max-width: 767px){
+    #bouton_menu{
+        margin-right: 2em;
+    }
+}
+
+@media screen and (max-width: 525px){
+    .ml3{
+        font-size: 4em;
+    }
+    #titre_bibliotheque{
+        font-size: 4em;
+
+    }
+
+    #titre_nom_bibliotheque{
+        font-size: 5em;
+
+    }
+}

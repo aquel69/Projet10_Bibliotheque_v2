@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="page accueil">
+        <meta name="author" content="alardon">
+        <title>Accueil</title>
+
+        <!-- animation texte bienvenue-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.js"></script>
+        <script src="backend.js" charset="utf-8"></script>
+        <!-- police google-->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&family=Tangerine:wght@700&display=swap" rel="stylesheet">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/styleAccueil.css}">
+    </head>
+    <body>
+        <div th:if="${message != null}">
+            <div class="alert alert-warning alert-dismissible" role="alert" >
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <strong>Félicitation </strong> <span th:text="${message}"></span>
+            </div>
+        </div>
+        <header>
+            <div th:insert="Header :: header(codeRole = ${codeRole}, utilisateurAuthentifie = ${utilisateurAuthentifie})"></div>
+        </header>
+        <div class="container-fluid">
+            <div class="row">
+                <div th:insert="FenetreModal.html :: fenetre(abonnePret = ${abonnePret})"></div>
+                <div class="col-md-12 order-lg-1 order-md-2 order-sm-2 col-lg-3 px-3 ml-5">
+                    <h1 id="titre_top_10" class="text-center mb-2">Top Emprunts</h1>
+                    <div class="row">
+                        <div id="jumbotron_top" class="col-12 jumbotron hoverable p-4 ">
+                            <div class="row">
+                                <div class="col-12">
+                                    <table class="table align-items-center">
+                                        <div th:each="livre, inter : ${livres}" >
+                                            <tbody class="col-12 py-2">
+                                                <tr>
+                                                  <td class="align-middle " width="15%"><h1 th:text="${inter.index + 1}"></h1></td>
+                                                  <td class="align-middle " width="15%"><img th:src="@{/photoOuvrage/{image}(image=${livre.getPetitePhotoCouverture()})}" /></td>
+                                                  <td class="align-middle " width="70%"><h5><a class="lien_livre" th:text= "${livre.getTitre()}" href="Livre/Detail.html" th:href="@{/Detail/{id}(id=${livre.getIdLivre()})}"></a></h5></td>
+                                                </tr>
+                                            </tbody>
+                                        </div>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 order-lg-2 order-md-1 order-sm-1 order-first col-lg-7 ml-5">
+                    <div class="row">
+                        <div class="col-12">
+                            <h1 id="titre_bibliotheque">Bibliothèque</h1>
+                            <h1 id="titre_nom_bibliotheque">Gotham</h1>
+                            <h1 id="titre_bienvenue" class="ml3">Bienvenue</h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="jumbotron_nouveaute" class="col-md-12 col-lg-11">
+                            <h1 id="titre_nouveaute" class="text-center mb-4">Nouveautés</h1>
+                            <div  class="col-12 jumbotron hoverable p-3">
+                                <div class="row">
+                                    <div id="tableau_nouveaute_1" class="table-responsive col-lg-6 col-12 border-right">
+                                        <table class="table align-items-center">
+                                            <div th:each="ouvrage, inter : ${ouvragesPartieUne}" >
+                                                <tbody class="col-12 py-2">
+                                                    <tr>
+                                                        <td class="align-middle " width="15%"><h1 th:text="${inter.index + 1}"></h1></td>
+                                                        <td class="align-middle " width="15%"><img th:src="@{/photoOuvrage/{image}(image=${ouvrage.getLivre().getPetitePhotoCouverture()})}" /></td>
+                                                        <td class="align-middle " width="70%"><h5><a class="lien_livre" th:text= "${ouvrage.getLivre().getTitre()}" href="Livre/Detail.html" th:href="@{/Detail/{id}(id=${ouvrage.getLivre().getIdLivre()})}"></a></h5></td>
+                                                    </tr>
+                                                </tbody>
+                                            </div>
+                                        </table>
+                                    </div>
+                                    <div class="table-responsive col-lg-6 col-12">
+                                        <table class="table align-items-center">
+                                            <div th:each="ouvrage, inter : ${ouvragesPartieDeux}" >
+                                                <tbody class="col-12 py-2">
+                                                    <tr>
+                                                        <td class="align-middle " width="15%"><h1 th:text="${inter.index + 4}"></h1></td>
+                                                        <td class="align-middle " width="15%"><img th:src="@{/photoOuvrage/{image}(image=${ouvrage.getLivre().getPetitePhotoCouverture()})}" /></td>
+                                                        <td class="align-middle " width="70%"><h5><a class="lien_livre" th:text= "${ouvrage.getLivre().getTitre()}" href="Livre/Detail.html" th:href="@{/Detail/{id}(id=${ouvrage.getLivre().getIdLivre()})}"></a></h5></td>
+                                                    </tr>
+                                                </tbody>
+                                            </div>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="../static/js/accueilJS.js" th:src="@{/js/accueilJS.js}"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </body>
+</html>

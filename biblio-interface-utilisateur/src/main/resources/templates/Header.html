@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="page accueil">
+        <meta name="author" content="alardon">
+        <title>Accueil</title>
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/styleHeader.css}">
+    </head>
+    <body >
+        <div th:fragment="header(codeRole, utilisateurAuthentifie)" class="container-fluid mt-4 pr-5" >
+            <div class="row ">
+                <div class="col-12">
+                    <div class="row justify-content-end">
+                        <div class="col-2 text-right">
+                            <div th:if="${codeRole != 0}">
+                                <p style="font-size: 1.2em" id="bienvenue_pseudo" th:text="${utilisateurAuthentifie.getPseudo()} + ', vous êtes connecté'"></p>
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            <div class="d-inline dropdown">
+                                <button id="bouton_menu" class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu</button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <span style="color: #99a5a2" class="pl-4">Bibliothèque</span>
+                                    <a class="dropdown-item" th:href="@{|/|}">Accueil</a>
+                                    <a class="dropdown-item" th:href="@{|/Catalogue/0/8/true|}">Catalogue</a>
+                                    <div th:if="${codeRole == 5}">
+                                        <div class="dropdown-divider"></div>
+                                        <span style="color: #99a5a2" class="pl-4">Employé</span>
+                                        <a class="dropdown-item" th:href="@{|/Emprunt|}">Gestion Emprunt</a>
+                                    </div>
+                                    <div th:if="${codeRole == 1}">
+                                        <div class="dropdown-divider"></div>
+                                        <span style="color: #99a5a2" class="pl-4">Compte</span>
+                                        <a class="dropdown-item" data-toggle="modal" data-target="#modal">Mes Emprunts</a>
+                                        <a class="dropdown-item" th:href="@{|/ModificationCompte|}">Modification</a>
+                                    </div>
+                                    <div th:if="${codeRole == 0}">
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" th:href="@{|/Authentification|}">Se connecter</a>
+                                    </div>
+                                    <div th:if="${codeRole != 0}">
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" th:href="@{/Deconnection}">Se déconnecter</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </body>
+</html>

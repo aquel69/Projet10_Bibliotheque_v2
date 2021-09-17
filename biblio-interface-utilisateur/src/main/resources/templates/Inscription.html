@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="page inscription abonné">
+        <meta name="author" content="alardon">
+        <title>Inscription Abonné</title>
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/styleInscription.css}">
+    </head>
+    <body>
+        <span th:insert="Header :: header(codeRole = ${codeRole}, utilisateurAuthentifie = ${utilisateurAuthentifie})"></span>
+        <div id="containeur_detail" class="container-fluid">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <h1 id="titre_catalogue" class="text-center text-light mt-5 mt-md-0">Inscription Abonné</h1>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-7">
+                    <div class="jumbotron p-4">
+                        <form th:action="@{/Inscription}" th:object="${abonne}" method="post">
+                            <h3 class="text-center mb-2">Identité</h3>
+                            <div class="form-row" >
+                                <div class="form-group col-md-4">
+                                    <label>Nom</label>
+                                    <input type="text" class="form-control"  th:field="*{nom}" />
+                                    <div th:if="${#fields.hasErrors('nom')}" class="alert alert-warning alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
+                                        <span th:errors="*{nom}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label>Prénom</label>
+                                    <input type="text" class="form-control"  th:field="*{prenom}" />
+                                    <div th:if="${#fields.hasErrors('prenom')}" class="alert alert-warning alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
+                                        <span th:errors="*{prenom}"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Pseudo</label>
+                                    <input type="text" class="form-control"  th:field="*{pseudo}" />
+                                    <div th:if="${#fields.hasErrors('pseudo')}" class="alert alert-warning alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
+                                        <span th:errors="*{pseudo}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <h3 class="text-center mb-2">Coordonnées</h3>
+                            <div th:object="${adresse}">
+                                <div class="form-row " >
+                                    <div class="form-group col-md-3 mb-0">
+                                        <label for="numero">Numéro</label>
+                                        <input id="numero" type="text" class="form-control"  th:field="*{numero}" />
+                                        <div th:if="${#fields.hasErrors('numero')}" class="alert alert-warning alert-dismissible" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span></button>
+                                            <span th:errors="*{numero}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-9 mb-0">
+                                        <label for="rue">Rue</label>
+                                        <input id="rue" type="text" class="form-control"  th:field="*{rue}" />
+                                        <div th:if="${#fields.hasErrors('rue')}" class="alert alert-warning alert-dismissible" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span></button>
+                                            <span th:errors="*{rue}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-outline p-0">
+                                    <label for="complement">Complément</label>
+                                    <input id="complement" type="text" class="form-control"  th:field="*{complement}" />
+                                    <div th:if="${#fields.hasErrors('complement')}" class="alert alert-warning alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
+                                        <span th:errors="*{complement}"></span>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label for="codePostal">Code Postal</label>
+                                        <input id="codePostal" type="text" class="form-control"  th:field="*{codePostal}" />
+                                        <div th:if="${#fields.hasErrors('codePostal')}" class="alert alert-warning alert-dismissible" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span></button>
+                                            <span th:errors="*{codePostal}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-9">
+                                        <label for="ville">Ville</label>
+                                        <input id="ville" type="text" class="form-control"  th:field="*{ville}" />
+                                        <div th:if="${#fields.hasErrors('ville')}" class="alert alert-warning alert-dismissible" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span></button>
+                                            <span th:errors="*{ville}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h3 class="text-center mb-2">Identification</h3>
+                            <div class="form-outline">
+                                <label class="form-label" for="email">Email</label>
+                                <input id="email" type="email" th:field="*{email}" class="form-control" />
+                                <div th:if="${#fields.hasErrors('email')}" class="alert alert-warning alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <span th:errors="*{email}"></span>
+                                </div>
+                                <div th:if="${messageErreur != null}" class="alert alert-warning alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <span th:text="${messageErreur}"></span>
+                                </div>
+                            </div>
+                            <div class="form-outline mb-3">
+                                <label class="form-label" for="email">Confirmation Email</label>
+                                <input id="emailConfirmation" type="email" th:value="${confirmationEmail}" name="confirmationEmail" class="form-control" />
+                                <div th:if="${messageErreurEmail != null}">
+                                    <div class="alert alert-warning alert-dismissible my-3" role="alert" >
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
+                                        <span th:text="${messageErreurEmail}"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Password input -->
+                            <div class="form-outline">
+                                <label class="form-label" for="password">Mot de passe</label>
+                                <input id="password" type="password" th:field="*{motDePasse}" class="form-control" />
+                                <div th:if="${#fields.hasErrors('motDePasse')}" class="alert alert-warning alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <span th:errors="*{motDePasse}"></span>
+                                </div>
+                            </div>
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="password">Confirmation Mot de passe</label>
+                                <input id="passwordConfirmation" type="password" th:value="${confirmationMotDePasse}" name="confirmationMotDePasse" class="form-control" />
+                                <div th:if="${messageErreurMotDePasse != null}">
+                                    <div class="alert alert-warning alert-dismissible my-3" role="alert" >
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
+                                        <span th:text="${messageErreurMotDePasse}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Submit button -->
+                            <div class="row justify-content-center">
+                                <div class="col-3 ">
+                                    <button type="submit" id="btn_inscription" th:onclick="|window.location.href='/Inscription'|" class="btn btn-primary btn-block mb-4 text-center">Envoyer</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+                integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                crossorigin="anonymous"></script>
+    </body>
+</html>

@@ -1,0 +1,103 @@
+body{
+    background-image: url("../photoSite/page_detail_du_livre.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #464646;
+    margin: 0;
+    height: 100%;
+}
+
+/*fenêtre*/
+.titre_livre_fenetre{
+    font-size: 0.8em;
+}
+
+#table_fenetre{
+    overflow-x: auto;
+}
+
+#modal .modal-dialog .modal-content{
+    background-color: #c4dae2;
+
+}
+
+/*menu*/
+#bienvenue_pseudo{
+    color: #4e4747;
+}
+
+.jumbotron{
+    opacity: 93%;
+}
+
+#couverture_livre{
+    margin-top: 10em;
+    margin-left: 9em;
+}
+
+#jumbotron_detail{
+    height: 47em;
+    min-height: 47em;
+    max-height: 47em;
+    margin-left: 9em;
+}
+
+#titre_detail{
+    font-family: 'Signika', sans-serif;
+}
+
+#titre_livre{
+    font-family: 'Nunito Sans', sans-serif;
+    border-bottom: 1px solid #a9a9a9;
+}
+
+@media screen and (max-width: 1444px){
+    #couverture_livre{
+        margin-left: 3em;
+    }
+    #jumbotron_detail{
+        margin-left: 9em;
+    }
+}
+
+@media screen and (max-width: 991px){
+    #titre_detail{
+        margin-left: 2em;
+        margin-bottom: 0;
+    }
+
+    #couverture_livre{
+        margin-top: 0em;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 2.5em;
+    }
+    #jumbotron_detail{
+        margin-left: auto;
+        margin-right: auto;
+        height: auto;
+        min-height: auto;
+        max-height: max-content;
+    }
+
+}
+
+@media screen and (max-width: 767px){
+    #bouton_menu{
+        margin-right: 2em;
+    }
+    #jumbotron_detail{
+        margin-left: 40px;
+    }
+}
+
+@media screen and (max-width: 576px){
+    #couverture_livre{
+        margin-left : 7em;
+    }
+    #jumbotron_detail{
+        margin-left: 3em;
+    }
+}

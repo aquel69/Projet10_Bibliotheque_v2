@@ -1,0 +1,23 @@
+body{
+    background-image: url("../photoSite/page_authentification_creation_abonne.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #464646;
+    margin: 0;
+    height: 100%;
+}
+
+.jumbotron{
+    opacity: 93%;
+    background-color: #83ece4;
+}
+
+
+@media screen and (max-width:766px){
+
+    #bouton_menu{
+        margin-right: 2em;
+    }
+}
