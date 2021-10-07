@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="page liste livre">
         <meta name="author" content="alardon">
-        <title>Accueil</title>
+        <title>Catalogue</title>
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
@@ -19,6 +19,7 @@
         <span th:insert="Header :: header(codeRole = ${codeRole}, utilisateurAuthentifie = ${utilisateurAuthentifie})"></span>
         <div id="containeur_detail" class="container-fluid">
             <div th:insert="FenetreModal.html :: fenetre(abonnePret = ${abonnePret})"></div>
+            <div th:insert="FenetreModalReservation.html :: fenetreReservation(abonneReservation = ${abonneReservation})"></div>
             <div class="row">
                 <div class="col-5">
                     <form th:action="@{|/Catalogue/0/8|}" method="post">

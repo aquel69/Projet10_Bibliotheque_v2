@@ -1,6 +1,7 @@
 package fr.lardon.bibliointerfaceutilisateur.controller;
 
 import fr.lardon.bibliointerfaceutilisateur.models.gestionutilisateur.Abonne;
+import fr.lardon.bibliointerfaceutilisateur.models.gestionutilisateur.Bibliotheque;
 import fr.lardon.bibliointerfaceutilisateur.models.ouvrage.*;
 import fr.lardon.bibliointerfaceutilisateur.proxies.MicroserviceGestionUtilisateur;
 import fr.lardon.bibliointerfaceutilisateur.proxies.MicroserviceLivresProxy;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -65,6 +67,7 @@ public class EmployeController {
      */
     @RequestMapping(value = "/Emprunt", method = RequestMethod.POST)
     public String emprunt(Model model, @ModelAttribute("ouvrage") Ouvrage ouvrage, @ModelAttribute("abonne") Abonne abonne){
+        Bibliotheque bibliotheque;
 
         //attibution de la date d'emprunt
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -133,6 +136,35 @@ public class EmployeController {
         //ajout message validation emprunt
         message = "Le livre '" + this.ouvrage.getLivre().getTitre()  + "' emprunté par '" + this.abonne.getPrenom()  + " " + this.abonne.getNom() + "' est enregistré";
 
+        //récupération de l'abonné qui vient d'être supprimé
+        /*        abonneSupprime = livresProxy.AbonneOuvrageReservationSelonId(supprimerReservation);*/
+        List<AbonneOuvrageReservation> abonneOuvrageReservationList = new ArrayList<>();
+        AbonneOuvrageReservationAModifie abonneModifie = new AbonneOuvrageReservationAModifie();
+        //à partir de l'abonné supprimé, on récupère la liste des des réservations restantes
+        abonneOuvrageReservationList = livresProxy.listeReservationSelonOuvrage
+                (this.ouvrage.getIdOuvrage()
+                        , this.ouvrage.getNombreExemplairesTotal() * 2);
+
+        if (abonneOuvrageReservationList.size() != 0 ) {
+            if (abonneOuvrageReservationList.get(0).getAbonneReservation().getIdAbonne() == this.abonne.getIdAbonne()){
+                livresProxy.supprimerReservation(abonneOuvrageReservationList.get(0).getIdAbonneOuvrageReservation());
+                abonneOuvrageReservationList.remove(0);
+
+                for (AbonneOuvrageReservation abonneOuvrageReservationBoucle : abonneOuvrageReservationList) {
+                    abonneModifie.setIdAbonneOuvrageReservation(abonneOuvrageReservationBoucle.getIdAbonneOuvrageReservation());
+                    abonneModifie.setPositionAttente(abonneOuvrageReservationBoucle.getPositionAttente() - 1);
+
+                    livresProxy.modifierAbonneReservation(abonneModifie);
+                }
+
+                //ajout du dernier numéo d'ouvrage dans la table bibliotheque de la base de donnée
+                bibliotheque = livresProxy.bibliothequeSelonOuvrage(this.ouvrage.getIdOuvrage());
+                bibliotheque.setDernierOuvrageRestitue(this.ouvrage.getIdOuvrage());
+                bibliotheque.setNouveauDernierOuvrage(true);
+                livresProxy.modifierBibliotheque(bibliotheque);
+            }
+        }
+
         //ajout dans le model
         model.addAttribute("message", message);
         ajoutDansLeModel(model);
@@ -151,6 +183,7 @@ public class EmployeController {
     public String restitution(Model model, @ModelAttribute("ouvrage") Ouvrage ouvrage, @ModelAttribute("abonne") Abonne abonne){
         AbonnePretOuvrage abonnePretOuvrage;
         List<Pret> pretList;
+        Bibliotheque bibliotheque;
         isRestitue = false;
 
         if(!verificationOuvrageExistant(ouvrage) || !verificationAbonneExistant(abonne)){
@@ -180,6 +213,12 @@ public class EmployeController {
         if(isRestitue) {
             //ajout validation
             messageRestitution = "L'ouvrage '" + this.ouvrage.getLivre().getTitre() + "' emprunté par '" + this.abonne.getPrenom()  + " " + this.abonne.getNom() + "' a été restitué";
+
+            //ajout du dernier numéo d'ouvrage dans la table bibliotheque de la base de donnée
+            bibliotheque = livresProxy.bibliothequeSelonOuvrage(this.ouvrage.getIdOuvrage());
+            bibliotheque.setDernierOuvrageRestitue(this.ouvrage.getIdOuvrage());
+            bibliotheque.setNouveauDernierOuvrage(true);
+            livresProxy.modifierBibliotheque(bibliotheque);
 
             //ajout dans le model
             model.addAttribute("messageRestitution", messageRestitution);

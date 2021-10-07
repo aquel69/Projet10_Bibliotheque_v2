@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -46,6 +47,13 @@ public class Ouvrage {
     private int nombreExemplaires;
 
     /**
+     * nombre réél d'exemplaire totales dans la bibliothèque
+     */
+    @NonNull
+    @Column(name = "nombre_total_exemplaires")
+    private int nombreExemplairesTotal;
+
+    /**
      * siret de la bibliothèque
      */
     @NonNull
@@ -60,6 +68,10 @@ public class Ouvrage {
     @JoinColumn(name = "id_livre")
     private Livre livre;
 
-
+    /**
+     * date de retour prévue
+     */
+    @Column(name="date_retour_prevue")
+    private LocalDateTime dateDeRetourPrevue;
 
 }

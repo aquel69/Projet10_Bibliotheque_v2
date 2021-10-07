@@ -42,4 +42,16 @@ public class Bibliotheque {
     @JoinColumn(name = "id_adresse")
     private Adresse adresse;
 
+    /**
+     * dernier ouvrage restitué
+     */
+    @Column(name="dernier_ouvrage_rendu")
+    private int dernierOuvrageRestitue;
+
+    /**
+     * est ce qu'un nouvel ouvrage a été restitué
+     */
+    @Column(name="nouveau_dernier_ouvrage")
+    private boolean nouveauDernierOuvrage;
+
 }

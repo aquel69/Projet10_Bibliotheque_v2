@@ -25,4 +25,14 @@ public class Bibliotheque {
      */
     private Adresse adresse;
 
+    /**
+     * dernier ouvrage restitué
+     */
+    private int dernierOuvrageRestitue;
+
+    /**
+     * est ce qu'un nouvel ouvrage a été restitué
+     */
+    private boolean nouveauDernierOuvrage;
+
 }

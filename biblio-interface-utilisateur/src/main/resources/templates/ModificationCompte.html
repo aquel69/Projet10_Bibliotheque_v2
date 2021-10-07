@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="modification du compte abonné">
         <meta name="author" content="alardon">
-        <title>Inscription Abonné</title>
+        <title>Modification Compte</title>
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -23,6 +23,7 @@
     <span th:insert="Header :: header(codeRole = ${codeRole}, utilisateurAuthentifie = ${utilisateurAuthentifie})"></span>
     <div id="containeur_detail" class="container-fluid">
         <div th:insert="FenetreModal.html :: fenetre(abonnePret = ${abonnePret})"></div>
+        <div th:insert="FenetreModalReservation.html :: fenetreReservation(abonneReservation = ${abonneReservation})"></div>
         <div class="row">
             <div class="col-12 mb-2">
                 <h1 id="titre_catalogue" class="text-center text-dark mt-2 mt-md-0">Modification du Compte</h1>

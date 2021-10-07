@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="page détail livre">
         <meta name="author" content="alardon">
-        <title>Accueil</title>
+        <title>Détail Livre</title>
 
         <!-- Bootstrap CSS -->
         <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -15,7 +15,8 @@
         <link rel="stylesheet" type="text/css" th:href="@{/css/styleDetailLivre.css}">
     </head>
     <body>
-        <span th:insert="Header :: header(codeRole = ${codeRole}, utilisateurAuthentifie = ${utilisateurAuthentifie})"></span>
+        <div th:insert="Header :: header(codeRole = ${codeRole}, utilisateurAuthentifie = ${utilisateurAuthentifie})"></div>
+        <div th:insert="FenetreModalReservation.html :: fenetreReservation(abonneReservation = ${abonneReservation})"></div>
         <div id="containeur_detail" class="container-fluid">
             <div th:insert="FenetreModal.html :: fenetre(abonnePret = ${abonnePret})"></div>
             <div class="row">
@@ -79,24 +80,73 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mt-5" >
-                                <div class="col-12 mt-1" >
-                                    <h6 class="d-inline">Bibliothèque Bruce Wayne : </h6>
-                                    <p class="d-inline" th:text="${ouvrages[1].getNombreExemplaires()} + ' exemplaires'"></p>
+                            <form action="#" th:action="@{/DetailPost/{id}(id=${detailLivre.getIdLivre()})}" th:object="${ouvrages}" method="post">
+                                <!--<form th:action="@{/DetailPost/{id}(id=${detailLivre.getIdLivre()})}" th:object="${abonnePret}" method="post">-->
+                                <div class="row mt-5" >
+                                    <div class="col-4 mt-1" >
+                                        <h6 class="d-inline">Bibliothèque Bruce Wayne : </h6>
+                                        <p class="d-inline" th:text="${ouvrages[1].getNombreExemplaires()} + ' exemplaires'"></p>
+                                    </div>
+                                    <div class="col-3 mt-1" th:if="${pretRetourBruce != null && ouvrages[1].getNombreExemplaires() <= 0}">
+                                        <p class="d-inline" th:text="'retour de prêt le, '+ ${#temporals.format(pretRetourBruce.getDateDeRestitution(), 'dd-MM-yyyy')}"></p>
+                                    </div>
+                                    <div th:if="${pretRetourBruce == null || ouvrages[1].getNombreExemplaires() > 0}" class="offset-3"></div>
+                                    <div class="col-3 mt-1" th:if="${pretRetourBruce != null && ouvrages[1].getNombreExemplaires() <= 0}">
+                                        <p class="d-inline" th:text="'file d\'attente : '+ ${listeReservationBruce.size()  + ' personne(s)'}"></p>
+                                    </div>
+                                    <div th:if="${pretRetourBruce == null || ouvrages[1].getNombreExemplaires() > 0}" class="offset-3"></div>
+                                    <div class="col-2 mt-1">
+                                        <button class="ml-auto btn btn-lg btn-primary btn-block btn-sm" name="action" value="18004625200177" type="submit" th:disabled="${codeRole == 0 || ouvrages[1].getNombreExemplaires() > 0 || pretRetourBruce == null}">Réserver</button>
+                                    </div>
+
+
+                                    <div class="col-4 mt-3">
+                                        <h6 class="d-inline">Bibliothèque Robin : </h6>
+                                        <p class="d-inline" th:text="${ouvrages[2].getNombreExemplaires()} + ' exemplaires'"></p>
+                                    </div>
+                                    <div class="col-3 mt-3" th:if="${pretRetourRobin != null && ouvrages[2].getNombreExemplaires() <= 0}">
+                                        <p class="d-inline" th:text="'retour de prêt le, '+ ${#temporals.format(pretRetourRobin.getDateDeRestitution(), 'dd-MM-yyyy')}"></p>
+                                    </div>
+                                    <div th:if="${pretRetourRobin == null || ouvrages[2].getNombreExemplaires() > 0}" class="offset-3"></div>
+                                    <div class="col-3 mt-3" th:if="${pretRetourRobin != null && ouvrages[2].getNombreExemplaires() <= 0}">
+                                        <p class="d-inline" th:text="'file d\'attente : '+ ${listeReservationRobin.size()  + ' personne(s)'}"></p>
+                                    </div>
+                                    <div th:if="${pretRetourRobin == null || ouvrages[2].getNombreExemplaires() > 0}" class="offset-3"></div>
+                                    <div class="col-2 mt-3">
+                                        <button class="ml-auto btn btn-lg btn-primary btn-block btn-sm" type="submit" name="action" value="18004625200356" th:disabled="${codeRole == 0 || ouvrages[2].getNombreExemplaires() > 0 || pretRetourRobin == null}">Réserver</button>
+                                    </div>
+
+
+                                    <div class="col-4 mt-3">
+                                        <h6 class="d-inline">Bibliothèque Alfred : </h6>
+                                        <p class="d-inline" th:text="${ouvrages[0].getNombreExemplaires()} + ' exemplaires'"></p>
+                                    </div>
+                                    <div class="col-3 mt-3" th:if="${pretRetourAlfred != null && ouvrages[0].getNombreExemplaires() <= 0}">
+                                        <p class="d-inline" th:text="'retour de prêt le, '+ ${#temporals.format(pretRetourAlfred.getDateDeRestitution(), 'dd-MM-yyyy')}"></p>
+                                    </div>
+                                    <div th:if="${pretRetourAlfred == null || ouvrages[0].getNombreExemplaires() > 0}" class="offset-3"></div>
+                                    <div class="col-3 mt-3" th:if="${pretRetourAlfred != null && ouvrages[0].getNombreExemplaires() <= 0}">
+                                        <p class="d-inline" th:text="'file d\'attente : '+ ${listeReservationAlfred.size() + ' personne(s)'}"></p>
+                                    </div>
+                                    <div th:if="${pretRetourAlfred == null || ouvrages[0].getNombreExemplaires() > 0}" class="offset-3"></div>
+                                    <div class="col-2 mt-3">
+                                        <button class="ml-auto btn btn-lg btn-primary btn-block btn-sm" type="submit" name="action" value="18004625200568" th:disabled="${codeRole == 0 || ouvrages[0].getNombreExemplaires() > 0 || pretRetourAlfred == null}">Réserver</button>
+                                    </div>
+
                                 </div>
-                                <div class="col-12 mt-1">
-                                    <h6 class="d-inline">Bibliothèque Robin : </h6>
-                                    <p class="d-inline" th:text="${ouvrages[2].getNombreExemplaires()} + ' exemplaires'"></p>
-                                </div>
-                                <div class="col-12 mt-1">
-                                    <h6 class="d-inline">Bibliothèque Alfred : </h6>
-                                    <p class="d-inline" th:text="${ouvrages[0].getNombreExemplaires()} + ' exemplaires'"></p>
+                            </form>
+                            <div class="row">
+                                <div class="col-12 pt-5" th:if="${message != null}">
+                                    <div class="alert alert-warning alert-dismissible" role="alert" >
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
+                                        <span th:text="${message}"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 

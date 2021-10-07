@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface daoLivreTop extends JpaRepository<LivreTop, Integer> {
+public interface DaoLivreTop extends JpaRepository<LivreTop, Integer> {
 
     @Query(value = "SELECT liv.id_livre FROM pret as pre\n" +
             "INNER JOIN ouvrage as ouv on pre.id_ouvrage = ouv.id_ouvrage\n" +

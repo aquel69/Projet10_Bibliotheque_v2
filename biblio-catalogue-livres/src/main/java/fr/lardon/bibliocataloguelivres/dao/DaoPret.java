@@ -16,4 +16,11 @@ public interface DaoPret extends JpaRepository<Pret, Integer> {
             "    WHERE abo.id_abonne = ? ORDER BY pre.statut_priorite", nativeQuery = true)
     List<Pret> listePretSelonAbonne(int idAbonne);
 
+    @Query(value = "SELECT * FROM pret WHERE id_ouvrage = ? AND rendu = false ORDER BY  date_restitution LIMIT 1", nativeQuery = true)
+    Pret dernierPretSelonOuvrageDate(int idOuvrage);
+
+
+    @Query(value = "SELECT * FROM pret WHERE rendu = FALSE", nativeQuery = true)
+    List<Pret> listeDesPretNonRendu();
+
 }
