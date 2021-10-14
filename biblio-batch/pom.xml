@@ -12,7 +12,7 @@
 	<packaging>war</packaging>
 	<groupId>fr.lardon</groupId>
 	<artifactId>biblio-batch</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>biblio-batch</name>
 	<description>gestion des batchs</description>
 

@@ -11,7 +11,7 @@
 	<packaging>war</packaging>
 	<groupId>fr.lardon</groupId>
 	<artifactId>biblio-gestion-utilisateur</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>biblio-gestion-utilisateur</name>
 	<description>gestion des utilisateurs</description>
 
