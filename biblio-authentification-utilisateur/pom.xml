@@ -10,7 +10,7 @@
 	<packaging>war</packaging>
 	<groupId>fr.lardon</groupId>
 	<artifactId>biblio-authentification-utilisateur</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>biblio-authentification-utilisateur</name>
 	<description>gestion de l'authentification</description>
 

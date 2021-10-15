@@ -51,7 +51,8 @@ public class ServiceAbonnePretOuvrage {
                 pret.setStatut("Prêt en cours");
                 pret.setStatutPriorite("4");
             }else if(chrono > 14 && pret.isRendu() == false && pret.isProlongation() ==true){
-                pret.setStatut("Prolongation");
+                //PROLONGATION : Modification du statut
+                pret.setStatut("Déjà Prolongé");
                 pret.setStatutPriorite("3");
             }else if(chrono <= 7 && chrono >= 0 && pret.isRendu() == false){
                 pret.setStatut("Dernière semaine");

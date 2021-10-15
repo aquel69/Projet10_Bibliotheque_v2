@@ -93,11 +93,12 @@ public class CatalogueController {
     }
 
     /**
-     * permet de récupérer les données pour la prolongation d'un ouvrage et renvoie à l'accueil avec un message
+     * permet de récupérer les données pour qu'un ouvrage soit prolongé et renvoie à l'accueil avec un message
      * @param model
      * @param pretProlongation
      * @return
      */
+    //PROLONGATION : Méthode post qui récupère l'ouvrage à prolongé et donne le message correspondant
     @RequestMapping(value = "/Prolongation", method = RequestMethod.POST)
     public String accueilPost(Model model,@RequestParam int pretProlongation){
         String message;
@@ -110,7 +111,7 @@ public class CatalogueController {
         //modification du prêt
         pretAModifie.setIdPret(pret.getIdPret());
         pretAModifie.setRendu(false);
-        pretAModifie.setStatut("Prolongation");
+        pretAModifie.setStatut("Déjà Prolongé");
         pretAModifie.setStatutPriorite("3");
         pretAModifie.setDateDEmprunt(pret.getDateDEmprunt());
         pretAModifie.setProlongation(true);
@@ -122,8 +123,9 @@ public class CatalogueController {
         //récupération de l'abonné après les modifications effectuées
         abonnePret = livresProxy.abonnePretSelonSonId(utilisateurAuthentifie.getIdAbonne());
 
+        //PROLONGATION : modification du message
         //ajout du message
-        message = "Le livre : " + pret.getOuvragePret().getLivre().getTitre() + " a bien été prolongé";
+        message = "Le livre : " + pret.getOuvragePret().getLivre().getTitre() + " est prolongé d'un mois";
 
         //ajout dans le model
         model.addAttribute("message", message);
