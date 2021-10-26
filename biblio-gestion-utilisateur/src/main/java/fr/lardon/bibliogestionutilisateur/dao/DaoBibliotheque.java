@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DaoBibliotheque extends JpaRepository<Bibliotheque, Integer> {
+public interface DaoBibliotheque extends JpaRepository<Bibliotheque, String> {
 
     Bibliotheque findByNumeroSiret(String numeroSiret);
 

@@ -24,4 +24,7 @@ public interface DaoOuvrage extends JpaRepository<Ouvrage, Integer> {
             "    WHERE id_livre = ? ORDER BY code_bibliotheque", nativeQuery = true)
     List<Ouvrage> listeOuvragesSelonIdLivre(int id);
 
+
+    @Query(value = "SELECT * FROM ouvrage WHERE id_livre = ? AND siret_bibliotheque = ?", nativeQuery = true)
+    Ouvrage ouvragesSelonIdLivreEtSiret(int idLivre, String siret);
 }

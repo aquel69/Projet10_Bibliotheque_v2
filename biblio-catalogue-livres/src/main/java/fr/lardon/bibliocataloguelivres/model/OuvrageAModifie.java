@@ -3,6 +3,7 @@ package fr.lardon.bibliocataloguelivres.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Data
@@ -24,5 +25,11 @@ public class OuvrageAModifie {
      */
     @Column(name = "nombre_exemplaires")
     private int nombreExemplaires;
+
+    /**
+     * date de la réservation
+     */
+    @Column(name="date_retour_prevue")
+    private LocalDateTime dateDeRetourPrevue;
 
 }

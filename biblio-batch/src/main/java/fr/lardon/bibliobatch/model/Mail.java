@@ -19,13 +19,13 @@ public class Mail {
      * objet du mail
      */
     private String subject;
-/*    private String content;*/
+
     /**
      * ouvrage
      */
     private Ouvrage ouvrage;
     /**
-     * abonné
+     * abonné prêt
      */
     private AbonnePret abonnePret;
     /**
@@ -36,5 +36,11 @@ public class Mail {
      * bibliothèque
      */
     private Bibliotheque bibliotheque;
+
+    /**
+     * abonné
+     */
+    private Abonne abonne;
+
 
 }

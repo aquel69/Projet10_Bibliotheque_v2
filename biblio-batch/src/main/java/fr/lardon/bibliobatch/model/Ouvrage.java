@@ -45,6 +45,13 @@ public class Ouvrage {
     private int nombreExemplaires;
 
     /**
+     * nombre réél d'exemplaire totales dans la bibliothèque
+     */
+    @NonNull
+    @Column(name = "nombre_total_exemplaires")
+    private int nombreExemplairesTotal;
+
+    /**
      * nombre code siret de la bibliothèque
      */
     @NonNull

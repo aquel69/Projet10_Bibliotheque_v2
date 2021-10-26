@@ -10,9 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * classe regroupant les méthodes permettant de retourner les objets en fonction des données souhaités pour la gestion des livres, ouvrages et prêts
@@ -42,10 +40,19 @@ public class LivreController {
     private DaoOuvrageAModifie daoOuvrageAModifie;
 
     @Autowired
-    private daoLivreTop daoLivreTop;
+    private DaoLivreTop daoLivreTop;
 
     @Autowired
     private ServiceAbonnePretOuvrage serviceAbonnePretOuvrage;
+
+    @Autowired
+    private DaoAbonneOuvrageReservation daoAbonneOuvrageReservation;
+
+    @Autowired
+    private DaoBibliotheque daoBibliotheque;
+
+    @Autowired
+    private DaoAbonneOuvrageReservationAModifie daoAbonneOuvrageReservationAModifie;
 
     /**
      * retourne la liste des ouvrages en fonction de leurs nombre de fois qu'ils ont été empruntés
@@ -153,6 +160,19 @@ public class LivreController {
     }
 
     /**
+     * récupérer un ouvrage en fonction de l'id du livre et du N°de siret
+     * @param id
+     * @param siret
+     * @return
+     */
+    @GetMapping( value = "/OuvrageSelonIdLivreEtSiret/{id}/{siret}")
+    public Ouvrage ouvragesSelonIdLivreEtSiret(@PathVariable int id, @PathVariable String siret) {
+        Ouvrage ouvrage = daoOuvrage.ouvragesSelonIdLivreEtSiret(id, siret);
+
+        return ouvrage;
+    }
+
+    /**
      * retourne la liste des livres en fonction de leurs anciennetés
      * @return
      */
@@ -169,7 +189,82 @@ public class LivreController {
      */
     @PostMapping(value = "/AjouterPret")
     public void ajouterPret(@RequestBody Pret pret) {
+
         daoPret.save(pret);
+    }
+
+    /**
+     * sauvegarder la réservation de l'ouvrage d'un abonné
+     * @param abonneOuvrageReservation bean à sauvegarder
+     */
+    @PostMapping(value = "/AjouterReservation")
+    public void ajouterReservation(@RequestBody AbonneOuvrageReservation abonneOuvrageReservation){
+        daoAbonneOuvrageReservation.save(abonneOuvrageReservation);
+    }
+
+    /**
+     * liste des réservations selon l'ouvrage
+     * @param id de l'ouvrage
+     * @return la liste des réservations selon l'ouvrage
+     */
+    @GetMapping(value = "/ListeReservationSelonOuvrage/{id}/{nombreLimiteReservation}")
+    public List<AbonneOuvrageReservation> listeReservationSelonOuvrage(@PathVariable int id, @PathVariable int nombreLimiteReservation) {
+        List<AbonneOuvrageReservation> list = daoAbonneOuvrageReservation.listeReservationSelonOuvrage(id, nombreLimiteReservation);
+
+        return list;
+    }
+
+    /**
+     * position de l'abonné selon l'ouvrage
+      * @param id
+     * @param nombreLimiteReservation
+     * @param idAbonne
+     * @return
+     */
+    @GetMapping(value = "/positionAbonneReservationSelonOuvrage/{id}/{nombreLimiteReservation}/{idAbonne}")
+    public int positionAbonneReservationSelonOuvrage(@PathVariable int id, @PathVariable int nombreLimiteReservation, @PathVariable int idAbonne) {
+        int position = 0;
+
+        List<AbonneOuvrageReservation> list = daoAbonneOuvrageReservation.listeReservationSelonOuvrage(id, nombreLimiteReservation);
+
+        for (int i = 0; i < list.size(); i++){
+            if (list.get(i).getAbonneReservation().getIdAbonne() == idAbonne){
+                position = i + 1;
+            }
+        }
+
+        return position;
+    }
+
+    /**
+     * liste de toutes les réservations
+     */
+    @GetMapping(value = "/ListeReservationTotale")
+    public List<AbonneOuvrageReservation> listeReservationTotale(){
+        List<AbonneOuvrageReservation> list = daoAbonneOuvrageReservation.listeReservationTotale();
+
+        return list;
+    }
+
+    /**
+     * retourne la liste des ouvrages réservé selon selon l'abonné
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/ListeReservationSelonAbonne/{id}")
+    public List<AbonneOuvrageReservation> listeReservationSelonAbonne(@PathVariable int id){
+        List<AbonneOuvrageReservation> list = daoAbonneOuvrageReservation.listeReservationSelonAbonne(id);
+
+        return list;
+    }
+
+    /**
+     * supprimer une réservation
+     * @param id
+     */
+    @DeleteMapping(value = "/SupprimerReservation/{id}")
+    public void supprimerReservation(@PathVariable int id) {
+        daoAbonneOuvrageReservation.deleteById(id);
     }
 
     /**
@@ -191,6 +286,45 @@ public class LivreController {
         Ouvrage ouvrage = daoOuvrage.findByCodeBibliotheque(codeBibliotheque);
 
         return ouvrage;
+    }
+
+    /**
+     * renvoi la bibliothèque selon l'ouvrage
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/bibliothequeSelonOuvrage/{id}")
+    public Bibliotheque bibliothequeSelonOuvrage(@PathVariable int id){
+        Bibliotheque bibliotheque = daoBibliotheque.bibliothequeSelonOuvrage(id);
+
+        return bibliotheque;
+    }
+
+    /**
+     * Modifier une bibliotheque
+     * @param bibliotheque
+     */
+    @PutMapping(value="/ModifierBibliotheque")
+    public void modifierBibliotheque(@RequestBody Bibliotheque bibliotheque) {
+         daoBibliotheque.save(bibliotheque);
+    }
+
+    /**
+     * Modifier un ouvrage
+     * @param ouvrage
+     */
+    @PutMapping(value="/ModifierOuvrage")
+    public void modifierOuvrage(@RequestBody OuvrageAModifie ouvrage) {
+        daoOuvrageAModifie.save(ouvrage);
+    }
+
+    /**
+     * modifier AbonneOuvrageReservation
+     * @param abonneOuvrageReservationAModifie
+     */
+    @PutMapping(value="/ModifierAbonneReservation")
+    public void modifierAbonneReservation(@RequestBody AbonneOuvrageReservationAModifie abonneOuvrageReservationAModifie) {
+        daoAbonneOuvrageReservationAModifie.save(abonneOuvrageReservationAModifie);
     }
 
     /**
@@ -236,6 +370,18 @@ public class LivreController {
     }
 
     /**
+     * retourne une liste de prêts en fonction de l'id de l'abonné
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/DernierPretSelonOuvrage/{id}")
+    public Pret dernierPretSelonOuvrage(@PathVariable int id){
+        Pret prets = daoPret.dernierPretSelonOuvrageDate(id);
+
+        return prets;
+    }
+
+    /**
      * retourne un prêt selon son id
      * @param id
      * @return
@@ -245,6 +391,26 @@ public class LivreController {
         Pret pret = daoPret.findById(id).get();
 
         return pret;
+    }
+
+    /**
+     * retourne la liste des prêts
+     */
+    @GetMapping(value = "/ListeDesPrets")
+    public List<Pret> listeDesPrets(){
+        List<Pret> prets = daoPret.findAll();
+
+        return prets;
+    }
+
+    /**
+     * retourne la liste des prêts non rendu
+     */
+    @GetMapping(value = "/ListeDesPretsNonRendu")
+    public List<Pret> listeDesPretsNonRendu(){
+        List<Pret> prets = daoPret.listeDesPretNonRendu();
+
+        return prets;
     }
 
     /**
@@ -317,4 +483,30 @@ public class LivreController {
 
         return ouvrages;
     }
+
+
+    /**
+     * recuperation du Dernier Id de la Reservation
+     */
+    @PostMapping(value = "/recuperationDernierIdReservation")
+    public int recuperationDernierIdReservation() {
+        int dernierId = 0;
+
+        dernierId = daoAbonneOuvrageReservation.recuperationDernierIdReservation();
+
+        return dernierId;
+    }
+
+
+    /**
+     * recuperation de l'abonne ouvrage reservation selon son id
+     */
+    @GetMapping(value = "/AbonneOuvrageReservationSelonId/{id}")
+    public AbonneOuvrageReservation AbonneOuvrageReservationSelonId(@PathVariable int id) {
+        AbonneOuvrageReservation abonneOuvrageReservation = daoAbonneOuvrageReservation.reservationAbonneSelonidReservation(id);
+
+        return abonneOuvrageReservation;
+    }
+
+
 }

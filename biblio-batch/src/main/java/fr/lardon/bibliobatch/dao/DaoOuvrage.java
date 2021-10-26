@@ -12,4 +12,6 @@ public interface DaoOuvrage extends JpaRepository<Ouvrage, Integer> {
 
     Ouvrage findByCodeBibliotheque(String codeBibliotheque);
 
+    Ouvrage findById(int id);
+
 }

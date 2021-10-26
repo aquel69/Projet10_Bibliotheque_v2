@@ -1,8 +1,7 @@
 package fr.lardon.bibliobatch.starterBatch;
 
 import fr.lardon.bibliobatch.controller.BatchController;
-import fr.lardon.bibliobatch.dao.DaoAbonnePret;
-import fr.lardon.bibliobatch.dao.DaoOuvrage;
+import fr.lardon.bibliobatch.dao.*;
 import fr.lardon.bibliobatch.model.*;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -20,6 +19,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -35,15 +35,28 @@ public class SchedulingConfiguration {
     private List<AbonnePret> abonnePretList;
     private Pret pretAEnvoyer;
     private String typeEmail = null;
+    int idDernierOuvrageRestitue = 0;
 
     @Autowired
     private JavaMailSender javaMailSender;
+
+/*    @Autowired
+    private MicroserviceInterfaceProxy microserviceInterfaceProxy;*/
 
     @Autowired
     private DaoAbonnePret daoAbonnePret;
 
     @Autowired
+    private DaoAbonne daoAbonne;
+
+    @Autowired
     private DaoOuvrage daoOuvrage;
+
+    @Autowired
+    private DaoPret daoPret;
+
+    @Autowired
+    private DaoAbonneOuvrageReservation daoAbonneOuvrageReservation;
 
     @Autowired
     private BatchController batchController;
@@ -52,8 +65,8 @@ public class SchedulingConfiguration {
     private Configuration freemarkerConfig;
 
     /*@Scheduled(cron = "0 0 0 * * *")*/
-    @Scheduled(fixedRate = 90000L)
-    public void startBatch() throws MessagingException, IOException, TemplateException {
+    /*@Scheduled(fixedRate = 90000L)
+    public void startBatchEmprunt() throws MessagingException, IOException, TemplateException {
         FreeMarkerConfigurationFactoryBean bean = new FreeMarkerConfigurationFactoryBean();
         bean.setTemplateLoaderPath("/templates/");
 
@@ -95,6 +108,99 @@ public class SchedulingConfiguration {
             }
         }
         System.out.println("Done");
+    }*/
+
+    /*@Scheduled(fixedRate = 90000L)*/
+    @Scheduled(cron = "*/1 * * * * *")
+    public void startBatchReservation() throws MessagingException, IOException, TemplateException{
+        FreeMarkerConfigurationFactoryBean bean = new FreeMarkerConfigurationFactoryBean();
+        bean.setTemplateLoaderPath("/templates/");
+        System.out.println("entre dans le batch reservation");
+        List<AbonneOuvrageReservation> abonneOuvrageReservationList;
+        List<Bibliotheque> bibliothequeList;
+        Bibliotheque bibliothequeDeLOuvrage = new Bibliotheque();
+        Ouvrage ouvrageRestitue;
+        Abonne abonne;
+        String nomBibliotheque = null;
+        mail = new Mail();
+        LocalDateTime dateTime = LocalDateTime.now().plusSeconds(1000);
+
+        //récupération, de la liste des bibliothèques
+        bibliothequeList = batchController.BibliothequeListe();
+
+        //parcours de la liste bibliothèque pour savoir si un ouvrage a été restitué
+        for (Bibliotheque bibliotheque : bibliothequeList) {
+            if (bibliotheque.isNouveauDernierOuvrage() && idDernierOuvrageRestitue == 0){
+                System.out.println("un ouvrage a été restitué");
+                idDernierOuvrageRestitue = bibliotheque.getDernierOuvrageRestitue();
+
+                bibliotheque.setNouveauDernierOuvrage(false);
+                bibliotheque.setDernierOuvrageRestitue(0);
+                batchController.modifierBibliotheque(bibliotheque);
+
+                break;
+            }
+        }
+
+        if (idDernierOuvrageRestitue != 0) {
+            bibliothequeDeLOuvrage = batchController.bibliothequeSelonOuvrage(idDernierOuvrageRestitue);
+
+            //ouvrage restitué
+            ouvrageRestitue = batchController.ouvrageParSonId(idDernierOuvrageRestitue);
+
+            //récupération liste des réservations selon l'ouvrage
+            abonneOuvrageReservationList = batchController.listeReservationSelonOuvrage
+                    (idDernierOuvrageRestitue, ouvrageRestitue.getNombreExemplairesTotal() * 2);
+
+            if (abonneOuvrageReservationList.size() > 0 && abonneOuvrageReservationList.get(0).isOuvrageRecupere() == false) {
+                System.out.println("envoi de l'email reservation");
+                //type Email
+                typeEmail = "EmailReservation.ftl";
+
+                //récupération de l'abonné
+                abonne = batchController.AbonneSelonId(abonneOuvrageReservationList.get(0).getAbonneReservation().getIdAbonne());
+
+                mail.setTo(abonne.getEmail());
+                mail.setSubject("L'ouvrage '" + ouvrageRestitue.getLivre().getTitre() + "' est disponible");
+                mail.setOuvrage(ouvrageRestitue);
+                mail.setBibliotheque(bibliothequeDeLOuvrage);
+
+                envoiEmail(mail);
+
+                //ajout dans la base de données de la date limite pour recuperer l'ouvrage
+                abonneOuvrageReservationList.get(0).setDateDeDelaiRecuperation(dateTime);
+                abonneOuvrageReservationList.get(0).setOuvrageRecupere(true);
+                batchController.modifierReservation(abonneOuvrageReservationList.get(0));
+
+                idDernierOuvrageRestitue = 0;
+            }
+        }
+
+    }
+
+    /*@Scheduled(fixedRate = 90000L)*/
+    @Scheduled(cron = "*/1 * * * * *")
+    public void startSupprimerReservation() throws MessagingException, IOException, TemplateException{
+        List<AbonneOuvrageReservation> abonneOuvrageReservationList;
+        LocalDateTime date = LocalDateTime.now();
+
+        abonneOuvrageReservationList = batchController.listeReservationTotale();
+
+        for (AbonneOuvrageReservation abonneOuvrageReservation : abonneOuvrageReservationList){
+            if (abonneOuvrageReservation.isOuvrageRecupere() && abonneOuvrageReservation.getDateDeDelaiRecuperation().isBefore(date)){
+                List<AbonneOuvrageReservation> abonneOuvrageReservationListBoucle;
+                Ouvrage ouvrageBoucle = abonneOuvrageReservation.getOuvrageReservation();
+
+                batchController.supprimerReservation(abonneOuvrageReservation.getIdAbonneOuvrageReservation());
+
+                abonneOuvrageReservationListBoucle = batchController.listeReservationSelonOuvrage
+                       (ouvrageBoucle.getIdOuvrage(), ouvrageBoucle.getNombreExemplairesTotal() * 2);
+
+                if (abonneOuvrageReservationListBoucle.size() != 0){
+                   idDernierOuvrageRestitue = ouvrageBoucle.getIdOuvrage();
+                }
+            }
+        }
     }
 
     public void envoiEmail(Mail mail) throws MessagingException, IOException, TemplateException {

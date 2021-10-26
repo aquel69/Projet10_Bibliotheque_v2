@@ -2,6 +2,7 @@ package fr.lardon.bibliointerfaceutilisateur.models.ouvrage;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +21,11 @@ public class Ouvrage {
     private Date dateAjoutOuvrage;
 
     /**
+     * date de la réservation
+     */
+    private LocalDateTime dateDeRetourPrevue;
+
+    /**
      * code bibliothèque de l'ouvrage
      */
     private String codeBibliotheque;
@@ -28,6 +34,11 @@ public class Ouvrage {
      * nombre d'exemplaire de l'ouvrage
      */
     private int nombreExemplaires;
+
+    /**
+     * nombre réél d'exemplaires totales dans la bibliothèque
+     */
+    private int nombreExemplairesTotal;
 
     /**
      * Livre

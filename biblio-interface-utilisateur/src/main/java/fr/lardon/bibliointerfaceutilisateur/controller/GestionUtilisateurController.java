@@ -1,6 +1,7 @@
 package fr.lardon.bibliointerfaceutilisateur.controller;
 
 import fr.lardon.bibliointerfaceutilisateur.models.gestionutilisateur.*;
+import fr.lardon.bibliointerfaceutilisateur.models.ouvrage.AbonneOuvrageReservation;
 import fr.lardon.bibliointerfaceutilisateur.models.ouvrage.AbonnePretOuvrage;
 import fr.lardon.bibliointerfaceutilisateur.proxies.MicroserviceGestionUtilisateur;
 import fr.lardon.bibliointerfaceutilisateur.proxies.MicroserviceLivresProxy;
@@ -32,6 +33,7 @@ public class GestionUtilisateurController {
     private BCryptPasswordEncoder bCryptPasswordMatche;
     private Abonne abonne = null;
     private Abonne abonneSecurisation = null;
+    private List<AbonneOuvrageReservation> abonneReservation;
     private AbonnePretOuvrage abonnePret = null;
     private Adresse adresse = new Adresse();
     private Bibliotheque bibliotheque = null;
@@ -173,7 +175,7 @@ public class GestionUtilisateurController {
         gestionUtilisateur.ajouterAbonne(abonnePost);
 
         //affichage du message
-        String message = abonnePost.getPseudo() + "!! Vous avez créé votre compte !!";
+        String message = abonnePost.getPseudo() + "! Félicitation! Vous avez créé votre compte !";
         model.addAttribute("message", message);
 
         //récupération des livres à afficher dans la page accueil
@@ -202,6 +204,7 @@ public class GestionUtilisateurController {
         if (model.getAttribute("utilisateurAuthentifie") != null) {
             utilisateurAuthentifie = (Abonne) model.getAttribute("utilisateurAuthentifie");
             abonnePret = livresProxy.abonnePretSelonSonId(utilisateurAuthentifie.getIdAbonne());
+            abonneReservation = livresProxy.listeReservationSelonAbonne(utilisateurAuthentifie.getIdAbonne());
         }
 
         abonneAModifier = gestionUtilisateur.recupererAbonne(utilisateurAuthentifie.getIdAbonne());
@@ -210,6 +213,7 @@ public class GestionUtilisateurController {
         model.addAttribute("abonnePret", abonnePret);
         model.addAttribute("abonneAModifier", abonneAModifier);
         model.addAttribute("utilisateurAuthentifie", utilisateurAuthentifie);
+        model.addAttribute("abonneReservation", abonneReservation);
         model.addAttribute("codeRole", codeRole);
         model.addAttribute("adresse", adresse);
 
@@ -273,6 +277,7 @@ public class GestionUtilisateurController {
                 model.addAttribute("messageErreurMotDePasse", messageErreurMotDePasse);
                 model.addAttribute("messageErreurNouveauMotDePasse", messageErreurNouveauMotDePasse);
                 model.addAttribute("abonneAModifier", abonneBeanModifier);
+                model.addAttribute("abonneReservation", abonneReservation);
                 model.addAttribute("utilisateurAuthentifie", utilisateurAuthentifie);
                 model.addAttribute("codeRole", codeRole);
 
@@ -294,12 +299,13 @@ public class GestionUtilisateurController {
         gestionUtilisateur.modifierAbonne(abonneAModifier);
 
         //affichage du message
-        String message = "Vous avez modifié votre compte !!";
+        String message = "Vous avez modifié votre compte !";
 
         model.addAttribute("abonnePret", abonnePret);
         model.addAttribute("message", message);
         model.addAttribute("abonneAModifier", abonneAModifier);
         model.addAttribute("utilisateurAuthentifie", utilisateurAuthentifie);
+        model.addAttribute("abonneReservation", abonneReservation);
         model.addAttribute("codeRole", codeRole);
 
         return "ModificationCompte";
