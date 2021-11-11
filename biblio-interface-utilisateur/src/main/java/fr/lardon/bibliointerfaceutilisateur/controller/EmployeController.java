@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -67,8 +66,6 @@ public class EmployeController {
      */
     @RequestMapping(value = "/Emprunt", method = RequestMethod.POST)
     public String emprunt(Model model, @ModelAttribute("ouvrage") Ouvrage ouvrage, @ModelAttribute("abonne") Abonne abonne){
-        Bibliotheque bibliotheque;
-
         //attibution de la date d'emprunt
         LocalDateTime localDateTime = LocalDateTime.now();
 
@@ -115,6 +112,7 @@ public class EmployeController {
         if(this.ouvrage.getNombreExemplaires() > 0) {
             ouvrageAModifie.setNombreExemplaires(this.ouvrage.getNombreExemplaires() - 1);
             ouvrageAModifie.setIdOuvrage(this.ouvrage.getIdOuvrage());
+            ouvrageAModifie.setDateDeRetourPrevue(this.ouvrage.getDateDeRetourPrevue());
             livresProxy.sauvegarderOuvrage(ouvrageAModifie);
         }else{
             //ajout erreur
@@ -138,7 +136,7 @@ public class EmployeController {
 
         //récupération de l'abonné qui vient d'être supprimé
         /*        abonneSupprime = livresProxy.AbonneOuvrageReservationSelonId(supprimerReservation);*/
-        List<AbonneOuvrageReservation> abonneOuvrageReservationList = new ArrayList<>();
+        List<AbonneOuvrageReservation> abonneOuvrageReservationList ;
         AbonneOuvrageReservationAModifie abonneModifie = new AbonneOuvrageReservationAModifie();
         //à partir de l'abonné supprimé, on récupère la liste des des réservations restantes
         abonneOuvrageReservationList = livresProxy.listeReservationSelonOuvrage
@@ -156,12 +154,6 @@ public class EmployeController {
 
                     livresProxy.modifierAbonneReservation(abonneModifie);
                 }
-
-                //ajout du dernier numéo d'ouvrage dans la table bibliotheque de la base de donnée
-                bibliotheque = livresProxy.bibliothequeSelonOuvrage(this.ouvrage.getIdOuvrage());
-                bibliotheque.setDernierOuvrageRestitue(this.ouvrage.getIdOuvrage());
-                bibliotheque.setNouveauDernierOuvrage(true);
-                livresProxy.modifierBibliotheque(bibliotheque);
             }
         }
 
@@ -239,11 +231,11 @@ public class EmployeController {
         //reajustement du nombre d'exemplaires et sauvegarde de l'ouvrage
         ouvrageAModifie.setNombreExemplaires(this.ouvrage.getNombreExemplaires() + 1);
         ouvrageAModifie.setIdOuvrage(this.ouvrage.getIdOuvrage());
+        ouvrageAModifie.setDateDeRetourPrevue(this.ouvrage.getDateDeRetourPrevue());
         livresProxy.sauvegarderOuvrage(ouvrageAModifie);
 
         effacementDesChampsDeSaisies();
 
-        /*model.addAttribute("messageRestitution", messageRestitution);*/
         ajoutDansLeModel(model);
 
         return "Employe";
@@ -264,13 +256,13 @@ public class EmployeController {
      * @param ouvrage
      * @return
      */
-    public boolean verificationOuvrageExistant(Ouvrage ouvrage){
+    public boolean verificationOuvrageExistant(Ouvrage ouvrage) {
         //Récupération de la liste des ouvrages
         List<Ouvrage> ouvrageList;
         ouvrageList = livresProxy.listeDesOuvrages();
 
-        for(Ouvrage ouvrageBoucle : ouvrageList){
-            if(ouvrageBoucle.getCodeBibliotheque().equals(ouvrage.getCodeBibliotheque())){
+        for(Ouvrage ouvrageBoucle : ouvrageList) {
+            if (ouvrageBoucle.getCodeBibliotheque().equals(ouvrage.getCodeBibliotheque())) {
                return true;
             }
         }
@@ -305,7 +297,7 @@ public class EmployeController {
         List<Pret> pretList;
 
         //récupération de la liste des prêt
-        abonnePretOuvrage = livresProxy.abonnePretSelonSonId(this.abonne.getIdAbonne());
+        abonnePretOuvrage = getAbonnePretOuvrage();
         pretList = abonnePretOuvrage.getListePret();
 
         for(Pret pret : pretList){
@@ -314,6 +306,12 @@ public class EmployeController {
             }
         }
         return false;
+    }
+
+    public AbonnePretOuvrage getAbonnePretOuvrage() {
+        AbonnePretOuvrage abonnePretOuvrage;
+        abonnePretOuvrage = livresProxy.abonnePretSelonSonId(this.abonne.getIdAbonne());
+        return abonnePretOuvrage;
     }
 
     /**

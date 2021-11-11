@@ -33,7 +33,6 @@ public class ServiceAbonnePretOuvrage {
         //ajout des prêt dans la liste d'ouvrage
         for(Pret pret : listePret){
             listeOuvrage.add(pret.getOuvragePret());
-            System.out.println(pret.getIdPret());
         }
 
         //changement du status suivant la période

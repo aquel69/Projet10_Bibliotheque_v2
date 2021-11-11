@@ -2,14 +2,17 @@ package fr.lardon.bibliointerfaceutilisateur.controller;
 
 import fr.lardon.bibliointerfaceutilisateur.models.gestionutilisateur.Abonne;
 import fr.lardon.bibliointerfaceutilisateur.models.gestionutilisateur.Bibliotheque;
-import fr.lardon.bibliointerfaceutilisateur.models.gestionutilisateur.Role;
 import fr.lardon.bibliointerfaceutilisateur.models.ouvrage.*;
 import fr.lardon.bibliointerfaceutilisateur.proxies.MicroserviceGestionUtilisateur;
 import fr.lardon.bibliointerfaceutilisateur.proxies.MicroserviceLivresProxy;
+import fr.lardon.bibliointerfaceutilisateur.technical.FunctionalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,7 +33,6 @@ public class CatalogueController {
     private List<Pret> listeTotalPretNonRendu;
     private AbonnePretOuvrage abonnePret;
     private List<AbonneOuvrageReservation> abonneReservation;
-    private Role role = new Role();
     private Abonne utilisateurAuthentifie = new Abonne();
     private int index = 0;
     private int codeRole = 0;
@@ -77,6 +79,7 @@ public class CatalogueController {
                     pret = livresProxy.dernierPretSelonOuvrage(ouvrageBoucle.getIdOuvrage());
                     ouvrageAModifie.setIdOuvrage(ouvrageBoucle.getIdOuvrage());
                     ouvrageAModifie.setDateDeRetourPrevue(pret.getDateDeRestitution());
+                    ouvrageAModifie.setNombreExemplaires(ouvrageBoucle.getNombreExemplaires());
                     livresProxy.modifierOuvrage(ouvrageAModifie);
                 }
             }
@@ -96,11 +99,6 @@ public class CatalogueController {
             abonneReservation = livresProxy.listeReservationSelonAbonne(utilisateurAuthentifie.getIdAbonne());
 
         }
-
-        for (AbonneOuvrageReservation abonneOuvrageReservation : abonneReservation){
-            System.out.println(abonneOuvrageReservation);
-        }
-
 
         ouvrages = livresProxy.listeDesOuvrages();
 
@@ -191,10 +189,10 @@ public class CatalogueController {
      * @return
      */
     @RequestMapping(value = "/Reservation", method = RequestMethod.POST)
-    public String reservation(Model model,@RequestParam(required=true,defaultValue="0") int supprimerReservation){
+    public String reservation (Model model,@RequestParam(required=true, defaultValue="0") int supprimerReservation){
         String message;
-        AbonneOuvrageReservation abonneSupprime = new AbonneOuvrageReservation();
-        List<AbonneOuvrageReservation> abonneOuvrageReservationList = new ArrayList<>();
+        AbonneOuvrageReservation abonneSupprime;
+        List<AbonneOuvrageReservation> abonneOuvrageReservationList;
         AbonneOuvrageReservationAModifie abonneModifie = new AbonneOuvrageReservationAModifie();
         Bibliotheque bibliotheque;
 
@@ -406,7 +404,6 @@ public class CatalogueController {
         return "DetailLivre";
     }
 
-
     /**
      * permet de renvoyer sur la page du catalogue et de récupérer la liste des livres
      * @param noPage
@@ -416,7 +413,7 @@ public class CatalogueController {
      * @return
      */
     @RequestMapping(value="/Catalogue/{noPage}/{nbLivresParPage}/{accesCatalogue}", method = RequestMethod.GET)
-    public String listeLivrePagination(@PathVariable int noPage, @PathVariable int nbLivresParPage, @PathVariable boolean accesCatalogue, Model model){
+    public String listeLivrePagination(@PathVariable int noPage, @PathVariable int nbLivresParPage, @PathVariable boolean accesCatalogue, Model model) throws FunctionalException {
         if(isRecherche == false || accesCatalogue == true) {
             listeLivresPagination = new ArrayList<>();
             List<Livre> listeTotaleDesLivres = livresProxy.listeLivre();
@@ -454,7 +451,7 @@ public class CatalogueController {
      * @return
      */
     @RequestMapping(value = "/Catalogue/{noPage}/{nbLivresParPage}", method = RequestMethod.POST)
-    public String recherche(Model model, @PathVariable int noPage, @PathVariable int nbLivresParPage, @RequestParam String recherche){
+    public String recherche(Model model, @PathVariable int noPage, @PathVariable int nbLivresParPage, @RequestParam String recherche) throws FunctionalException {
 
         if(!recherche.isEmpty()) {
             //savoir que nous sommes en recherche et récupérons la recherche dans une variable de classe
@@ -480,13 +477,12 @@ public class CatalogueController {
         return "Catalogue";
     }
 
-
     /**
      * récupérer les livres recherchés et calcul le nombre de pages pour la pagination
      * @param noPage
      * @param nbLivresParPage
      */
-    public void recuperationDesLivresRecherche(int noPage, int nbLivresParPage){
+    public void recuperationDesLivresRecherche(int noPage, int nbLivresParPage) throws FunctionalException {
         //récuperation des livres en fonction du numéro de la page
         listeLivresPagination = livresProxy.catalogueListeLivrePaginationRecherche(noPage, nbLivresParPage,recherche);
 
@@ -494,8 +490,18 @@ public class CatalogueController {
         List<Livre> listeLivresRecherche = livresProxy.catalogueListeLivrePaginationRecherche(recherche);
 
         //calcule du nombre de total de pages
+        calculNombreDePage(nbLivresParPage, listeLivresRecherche);
+    }
+
+    public double calculNombreDePage(int nbLivresParPage, List<Livre> listeLivresRecherche) throws FunctionalException {
         nbTotalPages = (double) listeLivresRecherche.size() / nbLivresParPage;
         nbTotalPages = Math.ceil(nbTotalPages);
+
+        if (nbTotalPages < 0) {
+            throw new FunctionalException("Le nombre de page est négatif.");
+        }
+
+        return nbTotalPages;
     }
 
 
@@ -503,7 +509,7 @@ public class CatalogueController {
         for (Pret abonnePret : listeDesPretsAbonne){
             if (abonnePret.getOuvragePret().getIdOuvrage() == ouvrageSelectionne.getIdOuvrage() && abonnePret.isRendu() == false) {
                 dejaReserve = true;
-                System.out.println("ouvrage déjà en votre possesion");
+
                 break;
             }
         }

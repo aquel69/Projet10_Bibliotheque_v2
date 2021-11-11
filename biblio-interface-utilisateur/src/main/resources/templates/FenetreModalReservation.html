@@ -24,19 +24,19 @@
         <!-- Modal body -->
         <div class="modal-body pt-0">
           <form th:action="@{/Reservation}" th:object="${abonneReservation}" method="post" class="form-inline justify-content-start" name="reservation">
-            <table  class="table table-hover align-items-center border-bottom mb-0" th:each="reservation, inter : ${abonneReservation}">
+            <table  class="table table-hover align-items-center border-bottom mb-0" >
               <thead>
               <tr>
                 <th class="align-middle text-center" style="width: 10%">Couverture</th>
-                <th class="align-middle text-center" style="width: 44%">Titre</th>
+                <th class="align-middle text-center" style="width: 46%">Titre</th>
                 <th class="align-middle text-center" style="width: 10%">Bibliothèque</th>
                 <th class="align-middle text-center" style="width: 10%">Position</th>
-                <th class="align-middle text-center" style="width: 16%">Retour</th>
+                <th class="align-middle text-center" style="width: 18%">Retour</th>
                 <th class="align-middle text-center" style="width: 10%">Supprimer</th>
               </tr>
               </thead>
 
-                <tbody>
+                <tbody th:each="reservation, inter : ${abonneReservation}">
                 <tr>
                   <td class="align-middle text-center" ><img th:src="@{/photoOuvrage/{image}(image=${reservation.getOuvrageReservation().getLivre().getPetitePhotoCouverture()})}" /></td>
                   <td class="align-middle  text-center titre_livre_fenetre" ><h6 th:text="${reservation.getOuvrageReservation().getLivre().getTitre()}"></h6></td>
