@@ -5,7 +5,7 @@
 -- Dumped from database version 12.2
 -- Dumped by pg_dump version 12.2
 
--- Started on 2021-03-05 14:18:57
+-- Started on 2021-11-11 11:54:42
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -23,7 +23,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 227 (class 1259 OID 42913)
+-- TOC entry 202 (class 1259 OID 76183)
 -- Name: abonne; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -45,7 +45,7 @@ CREATE TABLE public.abonne (
 ALTER TABLE public.abonne OWNER TO postgres;
 
 --
--- TOC entry 226 (class 1259 OID 42911)
+-- TOC entry 203 (class 1259 OID 76189)
 -- Name: abonne_id_abonne_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -60,8 +60,8 @@ CREATE SEQUENCE public.abonne_id_abonne_seq
 ALTER TABLE public.abonne_id_abonne_seq OWNER TO postgres;
 
 --
--- TOC entry 2964 (class 0 OID 0)
--- Dependencies: 226
+-- TOC entry 2972 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: abonne_id_abonne_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -69,7 +69,49 @@ ALTER SEQUENCE public.abonne_id_abonne_seq OWNED BY public.abonne.id_abonne;
 
 
 --
--- TOC entry 222 (class 1259 OID 42883)
+-- TOC entry 230 (class 1259 OID 76411)
+-- Name: abonne_ouvrage_reservation; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.abonne_ouvrage_reservation (
+    id_abonne_ouvrage_reservation numeric NOT NULL,
+    id_abonne numeric NOT NULL,
+    id_ouvrage numeric NOT NULL,
+    date_reservation timestamp without time zone NOT NULL,
+    recupere boolean NOT NULL,
+    position_reservation numeric,
+    date_delai_recupere timestamp without time zone
+);
+
+
+ALTER TABLE public.abonne_ouvrage_reservation OWNER TO postgres;
+
+--
+-- TOC entry 229 (class 1259 OID 76409)
+-- Name: abonne_ouvrage_reservation_id_abonne_ouvrage_resservation_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.abonne_ouvrage_reservation_id_abonne_ouvrage_resservation_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.abonne_ouvrage_reservation_id_abonne_ouvrage_resservation_seq OWNER TO postgres;
+
+--
+-- TOC entry 2973 (class 0 OID 0)
+-- Dependencies: 229
+-- Name: abonne_ouvrage_reservation_id_abonne_ouvrage_resservation_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.abonne_ouvrage_reservation_id_abonne_ouvrage_resservation_seq OWNED BY public.abonne_ouvrage_reservation.id_abonne_ouvrage_reservation;
+
+
+--
+-- TOC entry 204 (class 1259 OID 76191)
 -- Name: adresse; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -86,7 +128,7 @@ CREATE TABLE public.adresse (
 ALTER TABLE public.adresse OWNER TO postgres;
 
 --
--- TOC entry 221 (class 1259 OID 42881)
+-- TOC entry 205 (class 1259 OID 76197)
 -- Name: adresse_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -101,8 +143,8 @@ CREATE SEQUENCE public.adresse_id_seq
 ALTER TABLE public.adresse_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2965 (class 0 OID 0)
--- Dependencies: 221
+-- TOC entry 2974 (class 0 OID 0)
+-- Dependencies: 205
 -- Name: adresse_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -110,7 +152,7 @@ ALTER SEQUENCE public.adresse_id_seq OWNED BY public.adresse.id_adresse;
 
 
 --
--- TOC entry 213 (class 1259 OID 42831)
+-- TOC entry 206 (class 1259 OID 76199)
 -- Name: auteur; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -127,7 +169,7 @@ CREATE TABLE public.auteur (
 ALTER TABLE public.auteur OWNER TO postgres;
 
 --
--- TOC entry 212 (class 1259 OID 42829)
+-- TOC entry 207 (class 1259 OID 76205)
 -- Name: auteur_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -142,8 +184,8 @@ CREATE SEQUENCE public.auteur_id_seq
 ALTER TABLE public.auteur_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2966 (class 0 OID 0)
--- Dependencies: 212
+-- TOC entry 2975 (class 0 OID 0)
+-- Dependencies: 207
 -- Name: auteur_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -151,7 +193,7 @@ ALTER SEQUENCE public.auteur_id_seq OWNED BY public.auteur.id_auteur;
 
 
 --
--- TOC entry 223 (class 1259 OID 42892)
+-- TOC entry 208 (class 1259 OID 76207)
 -- Name: bibliotheque; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -159,15 +201,17 @@ CREATE TABLE public.bibliotheque (
     numero_siret character varying NOT NULL,
     nom character varying NOT NULL,
     code character varying NOT NULL,
-    id_adresse integer NOT NULL
+    id_adresse integer NOT NULL,
+    dernier_ouvrage_rendu integer,
+    nouveau_dernier_ouvrage boolean
 );
 
 
 ALTER TABLE public.bibliotheque OWNER TO postgres;
 
 --
--- TOC entry 2967 (class 0 OID 0)
--- Dependencies: 223
+-- TOC entry 2976 (class 0 OID 0)
+-- Dependencies: 208
 -- Name: COLUMN bibliotheque.code; Type: COMMENT; Schema: public; Owner: postgres
 --
 
@@ -175,7 +219,7 @@ COMMENT ON COLUMN public.bibliotheque.code IS 'Le code bibliothèque est un trig
 
 
 --
--- TOC entry 229 (class 1259 OID 51346)
+-- TOC entry 209 (class 1259 OID 76213)
 -- Name: editeur; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -188,7 +232,7 @@ CREATE TABLE public.editeur (
 ALTER TABLE public.editeur OWNER TO postgres;
 
 --
--- TOC entry 228 (class 1259 OID 51344)
+-- TOC entry 210 (class 1259 OID 76219)
 -- Name: editeur_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -203,8 +247,8 @@ CREATE SEQUENCE public.editeur_id_seq
 ALTER TABLE public.editeur_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2968 (class 0 OID 0)
--- Dependencies: 228
+-- TOC entry 2977 (class 0 OID 0)
+-- Dependencies: 210
 -- Name: editeur_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -212,7 +256,7 @@ ALTER SEQUENCE public.editeur_id_seq OWNED BY public.editeur.id_editeur;
 
 
 --
--- TOC entry 225 (class 1259 OID 42902)
+-- TOC entry 211 (class 1259 OID 76221)
 -- Name: employe; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -234,7 +278,7 @@ CREATE TABLE public.employe (
 ALTER TABLE public.employe OWNER TO postgres;
 
 --
--- TOC entry 224 (class 1259 OID 42900)
+-- TOC entry 212 (class 1259 OID 76227)
 -- Name: employe_id_employe_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -249,8 +293,8 @@ CREATE SEQUENCE public.employe_id_employe_seq
 ALTER TABLE public.employe_id_employe_seq OWNER TO postgres;
 
 --
--- TOC entry 2969 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 2978 (class 0 OID 0)
+-- Dependencies: 212
 -- Name: employe_id_employe_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -258,7 +302,7 @@ ALTER SEQUENCE public.employe_id_employe_seq OWNED BY public.employe.id_employe;
 
 
 --
--- TOC entry 220 (class 1259 OID 42873)
+-- TOC entry 213 (class 1259 OID 76229)
 -- Name: enumrole; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -272,7 +316,7 @@ CREATE TABLE public.enumrole (
 ALTER TABLE public.enumrole OWNER TO postgres;
 
 --
--- TOC entry 217 (class 1259 OID 42853)
+-- TOC entry 214 (class 1259 OID 76235)
 -- Name: genre; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -286,7 +330,7 @@ CREATE TABLE public.genre (
 ALTER TABLE public.genre OWNER TO postgres;
 
 --
--- TOC entry 216 (class 1259 OID 42851)
+-- TOC entry 215 (class 1259 OID 76241)
 -- Name: genre_nom_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -301,8 +345,8 @@ CREATE SEQUENCE public.genre_nom_seq
 ALTER TABLE public.genre_nom_seq OWNER TO postgres;
 
 --
--- TOC entry 2970 (class 0 OID 0)
--- Dependencies: 216
+-- TOC entry 2979 (class 0 OID 0)
+-- Dependencies: 215
 -- Name: genre_nom_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -310,7 +354,7 @@ ALTER SEQUENCE public.genre_nom_seq OWNED BY public.genre.id_genre;
 
 
 --
--- TOC entry 231 (class 1259 OID 59699)
+-- TOC entry 216 (class 1259 OID 76243)
 -- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -325,7 +369,7 @@ CREATE SEQUENCE public.hibernate_sequence
 ALTER TABLE public.hibernate_sequence OWNER TO postgres;
 
 --
--- TOC entry 230 (class 1259 OID 59538)
+-- TOC entry 217 (class 1259 OID 76245)
 -- Name: id_adresse; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -340,7 +384,7 @@ CREATE SEQUENCE public.id_adresse
 ALTER TABLE public.id_adresse OWNER TO postgres;
 
 --
--- TOC entry 219 (class 1259 OID 42864)
+-- TOC entry 218 (class 1259 OID 76247)
 -- Name: liste_genre; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -354,7 +398,7 @@ CREATE TABLE public.liste_genre (
 ALTER TABLE public.liste_genre OWNER TO postgres;
 
 --
--- TOC entry 218 (class 1259 OID 42862)
+-- TOC entry 219 (class 1259 OID 76253)
 -- Name: liste_genre_id_liste_genre_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -369,8 +413,8 @@ CREATE SEQUENCE public.liste_genre_id_liste_genre_seq
 ALTER TABLE public.liste_genre_id_liste_genre_seq OWNER TO postgres;
 
 --
--- TOC entry 2971 (class 0 OID 0)
--- Dependencies: 218
+-- TOC entry 2980 (class 0 OID 0)
+-- Dependencies: 219
 -- Name: liste_genre_id_liste_genre_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -378,7 +422,7 @@ ALTER SEQUENCE public.liste_genre_id_liste_genre_seq OWNED BY public.liste_genre
 
 
 --
--- TOC entry 207 (class 1259 OID 42798)
+-- TOC entry 220 (class 1259 OID 76255)
 -- Name: livre; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -400,7 +444,7 @@ CREATE TABLE public.livre (
 ALTER TABLE public.livre OWNER TO postgres;
 
 --
--- TOC entry 215 (class 1259 OID 42842)
+-- TOC entry 221 (class 1259 OID 76261)
 -- Name: livre_auteurs; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -414,7 +458,7 @@ CREATE TABLE public.livre_auteurs (
 ALTER TABLE public.livre_auteurs OWNER TO postgres;
 
 --
--- TOC entry 214 (class 1259 OID 42840)
+-- TOC entry 222 (class 1259 OID 76267)
 -- Name: livre_auteurs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -429,8 +473,8 @@ CREATE SEQUENCE public.livre_auteurs_id_seq
 ALTER TABLE public.livre_auteurs_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2972 (class 0 OID 0)
--- Dependencies: 214
+-- TOC entry 2981 (class 0 OID 0)
+-- Dependencies: 222
 -- Name: livre_auteurs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -438,7 +482,7 @@ ALTER SEQUENCE public.livre_auteurs_id_seq OWNED BY public.livre_auteurs.id_livr
 
 
 --
--- TOC entry 206 (class 1259 OID 42796)
+-- TOC entry 223 (class 1259 OID 76269)
 -- Name: livre_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -453,8 +497,8 @@ CREATE SEQUENCE public.livre_id_seq
 ALTER TABLE public.livre_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2973 (class 0 OID 0)
--- Dependencies: 206
+-- TOC entry 2982 (class 0 OID 0)
+-- Dependencies: 223
 -- Name: livre_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -462,7 +506,7 @@ ALTER SEQUENCE public.livre_id_seq OWNED BY public.livre.id_livre;
 
 
 --
--- TOC entry 209 (class 1259 OID 42809)
+-- TOC entry 224 (class 1259 OID 76271)
 -- Name: ouvrage; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -472,14 +516,16 @@ CREATE TABLE public.ouvrage (
     id_livre numeric NOT NULL,
     date_ajout date NOT NULL,
     nombre_exemplaires numeric NOT NULL,
-    siret_bibliotheque character varying NOT NULL
+    siret_bibliotheque character varying NOT NULL,
+    nombre_total_exemplaires numeric NOT NULL,
+    date_retour_prevue timestamp without time zone
 );
 
 
 ALTER TABLE public.ouvrage OWNER TO postgres;
 
 --
--- TOC entry 208 (class 1259 OID 42807)
+-- TOC entry 225 (class 1259 OID 76277)
 -- Name: ouvrage_id_ouvrage_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -494,8 +540,8 @@ CREATE SEQUENCE public.ouvrage_id_ouvrage_seq
 ALTER TABLE public.ouvrage_id_ouvrage_seq OWNER TO postgres;
 
 --
--- TOC entry 2974 (class 0 OID 0)
--- Dependencies: 208
+-- TOC entry 2983 (class 0 OID 0)
+-- Dependencies: 225
 -- Name: ouvrage_id_ouvrage_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -503,7 +549,7 @@ ALTER SEQUENCE public.ouvrage_id_ouvrage_seq OWNED BY public.ouvrage.id_ouvrage;
 
 
 --
--- TOC entry 211 (class 1259 OID 42820)
+-- TOC entry 226 (class 1259 OID 76279)
 -- Name: pret; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -523,7 +569,7 @@ CREATE TABLE public.pret (
 ALTER TABLE public.pret OWNER TO postgres;
 
 --
--- TOC entry 232 (class 1259 OID 59774)
+-- TOC entry 227 (class 1259 OID 76285)
 -- Name: pret_abonne_id_pret_abonne_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -538,7 +584,7 @@ CREATE SEQUENCE public.pret_abonne_id_pret_abonne_seq
 ALTER TABLE public.pret_abonne_id_pret_abonne_seq OWNER TO postgres;
 
 --
--- TOC entry 210 (class 1259 OID 42818)
+-- TOC entry 228 (class 1259 OID 76287)
 -- Name: pret_id_pret_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -553,8 +599,8 @@ CREATE SEQUENCE public.pret_id_pret_seq
 ALTER TABLE public.pret_id_pret_seq OWNER TO postgres;
 
 --
--- TOC entry 2975 (class 0 OID 0)
--- Dependencies: 210
+-- TOC entry 2984 (class 0 OID 0)
+-- Dependencies: 228
 -- Name: pret_id_pret_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -562,7 +608,7 @@ ALTER SEQUENCE public.pret_id_pret_seq OWNED BY public.pret.id_pret;
 
 
 --
--- TOC entry 2787 (class 2604 OID 42916)
+-- TOC entry 2781 (class 2604 OID 76289)
 -- Name: abonne id_abonne; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -570,7 +616,15 @@ ALTER TABLE ONLY public.abonne ALTER COLUMN id_abonne SET DEFAULT nextval('publi
 
 
 --
--- TOC entry 2785 (class 2604 OID 59669)
+-- TOC entry 2792 (class 2604 OID 76414)
+-- Name: abonne_ouvrage_reservation id_abonne_ouvrage_reservation; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.abonne_ouvrage_reservation ALTER COLUMN id_abonne_ouvrage_reservation SET DEFAULT nextval('public.abonne_ouvrage_reservation_id_abonne_ouvrage_resservation_seq'::regclass);
+
+
+--
+-- TOC entry 2782 (class 2604 OID 76290)
 -- Name: adresse id_adresse; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -578,7 +632,7 @@ ALTER TABLE ONLY public.adresse ALTER COLUMN id_adresse SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 2781 (class 2604 OID 42834)
+-- TOC entry 2783 (class 2604 OID 76291)
 -- Name: auteur id_auteur; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -586,7 +640,7 @@ ALTER TABLE ONLY public.auteur ALTER COLUMN id_auteur SET DEFAULT nextval('publi
 
 
 --
--- TOC entry 2788 (class 2604 OID 51349)
+-- TOC entry 2784 (class 2604 OID 76292)
 -- Name: editeur id_editeur; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -594,7 +648,7 @@ ALTER TABLE ONLY public.editeur ALTER COLUMN id_editeur SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 2786 (class 2604 OID 42905)
+-- TOC entry 2785 (class 2604 OID 76293)
 -- Name: employe id_employe; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -602,7 +656,7 @@ ALTER TABLE ONLY public.employe ALTER COLUMN id_employe SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 2783 (class 2604 OID 42856)
+-- TOC entry 2786 (class 2604 OID 76294)
 -- Name: genre id_genre; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -610,7 +664,7 @@ ALTER TABLE ONLY public.genre ALTER COLUMN id_genre SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 2784 (class 2604 OID 42867)
+-- TOC entry 2787 (class 2604 OID 76295)
 -- Name: liste_genre id_liste_genre; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -618,7 +672,7 @@ ALTER TABLE ONLY public.liste_genre ALTER COLUMN id_liste_genre SET DEFAULT next
 
 
 --
--- TOC entry 2778 (class 2604 OID 42801)
+-- TOC entry 2788 (class 2604 OID 76296)
 -- Name: livre id_livre; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -626,7 +680,7 @@ ALTER TABLE ONLY public.livre ALTER COLUMN id_livre SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 2782 (class 2604 OID 42845)
+-- TOC entry 2789 (class 2604 OID 76297)
 -- Name: livre_auteurs id_livre_auteur; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -634,7 +688,7 @@ ALTER TABLE ONLY public.livre_auteurs ALTER COLUMN id_livre_auteur SET DEFAULT n
 
 
 --
--- TOC entry 2779 (class 2604 OID 42812)
+-- TOC entry 2790 (class 2604 OID 76298)
 -- Name: ouvrage id_ouvrage; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -642,7 +696,7 @@ ALTER TABLE ONLY public.ouvrage ALTER COLUMN id_ouvrage SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 2780 (class 2604 OID 42823)
+-- TOC entry 2791 (class 2604 OID 76299)
 -- Name: pret id_pret; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -650,7 +704,16 @@ ALTER TABLE ONLY public.pret ALTER COLUMN id_pret SET DEFAULT nextval('public.pr
 
 
 --
--- TOC entry 2814 (class 2606 OID 42921)
+-- TOC entry 2822 (class 2606 OID 76419)
+-- Name: abonne_ouvrage_reservation abonne_ouvrage_reservation_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.abonne_ouvrage_reservation
+    ADD CONSTRAINT abonne_ouvrage_reservation_pk PRIMARY KEY (id_abonne_ouvrage_reservation);
+
+
+--
+-- TOC entry 2794 (class 2606 OID 76301)
 -- Name: abonne abonne_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -659,7 +722,7 @@ ALTER TABLE ONLY public.abonne
 
 
 --
--- TOC entry 2808 (class 2606 OID 59671)
+-- TOC entry 2796 (class 2606 OID 76303)
 -- Name: adresse adresse_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -668,7 +731,7 @@ ALTER TABLE ONLY public.adresse
 
 
 --
--- TOC entry 2798 (class 2606 OID 42839)
+-- TOC entry 2798 (class 2606 OID 76305)
 -- Name: auteur auteur_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -677,7 +740,7 @@ ALTER TABLE ONLY public.auteur
 
 
 --
--- TOC entry 2810 (class 2606 OID 42899)
+-- TOC entry 2800 (class 2606 OID 76307)
 -- Name: bibliotheque bibliotheque_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -686,7 +749,7 @@ ALTER TABLE ONLY public.bibliotheque
 
 
 --
--- TOC entry 2816 (class 2606 OID 51354)
+-- TOC entry 2802 (class 2606 OID 76309)
 -- Name: editeur editeur_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -695,7 +758,7 @@ ALTER TABLE ONLY public.editeur
 
 
 --
--- TOC entry 2812 (class 2606 OID 42910)
+-- TOC entry 2804 (class 2606 OID 76311)
 -- Name: employe employe_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -704,7 +767,7 @@ ALTER TABLE ONLY public.employe
 
 
 --
--- TOC entry 2806 (class 2606 OID 42880)
+-- TOC entry 2806 (class 2606 OID 76313)
 -- Name: enumrole enumrole_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -713,7 +776,7 @@ ALTER TABLE ONLY public.enumrole
 
 
 --
--- TOC entry 2802 (class 2606 OID 42861)
+-- TOC entry 2808 (class 2606 OID 76315)
 -- Name: genre genre_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -722,7 +785,7 @@ ALTER TABLE ONLY public.genre
 
 
 --
--- TOC entry 2804 (class 2606 OID 42872)
+-- TOC entry 2810 (class 2606 OID 76317)
 -- Name: liste_genre liste_genre_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -731,7 +794,7 @@ ALTER TABLE ONLY public.liste_genre
 
 
 --
--- TOC entry 2800 (class 2606 OID 42850)
+-- TOC entry 2814 (class 2606 OID 76319)
 -- Name: livre_auteurs livre_auteurs_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -740,7 +803,7 @@ ALTER TABLE ONLY public.livre_auteurs
 
 
 --
--- TOC entry 2790 (class 2606 OID 42806)
+-- TOC entry 2812 (class 2606 OID 76321)
 -- Name: livre livre_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -749,7 +812,7 @@ ALTER TABLE ONLY public.livre
 
 
 --
--- TOC entry 2793 (class 2606 OID 42817)
+-- TOC entry 2817 (class 2606 OID 76323)
 -- Name: ouvrage ouvrage_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -758,7 +821,7 @@ ALTER TABLE ONLY public.ouvrage
 
 
 --
--- TOC entry 2796 (class 2606 OID 42828)
+-- TOC entry 2820 (class 2606 OID 76325)
 -- Name: pret pret_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -767,7 +830,7 @@ ALTER TABLE ONLY public.pret
 
 
 --
--- TOC entry 2794 (class 1259 OID 59768)
+-- TOC entry 2818 (class 1259 OID 76326)
 -- Name: fki_abonne_pret_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -775,7 +838,7 @@ CREATE INDEX fki_abonne_pret_fk ON public.pret USING btree (id_abonne);
 
 
 --
--- TOC entry 2791 (class 1259 OID 59794)
+-- TOC entry 2815 (class 1259 OID 76327)
 -- Name: fki_bibliotheque_ouvrage_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -783,7 +846,16 @@ CREATE INDEX fki_bibliotheque_ouvrage_fk ON public.ouvrage USING btree (siret_bi
 
 
 --
--- TOC entry 2821 (class 2606 OID 59763)
+-- TOC entry 2839 (class 2606 OID 76420)
+-- Name: abonne_ouvrage_reservation abonne_abonne_ouvrage_reservation_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.abonne_ouvrage_reservation
+    ADD CONSTRAINT abonne_abonne_ouvrage_reservation_fk FOREIGN KEY (id_abonne) REFERENCES public.abonne(id_abonne);
+
+
+--
+-- TOC entry 2837 (class 2606 OID 76328)
 -- Name: pret abonne_pret_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -792,7 +864,7 @@ ALTER TABLE ONLY public.pret
 
 
 --
--- TOC entry 2832 (class 2606 OID 59677)
+-- TOC entry 2823 (class 2606 OID 76333)
 -- Name: abonne adresse_abonne_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -801,7 +873,7 @@ ALTER TABLE ONLY public.abonne
 
 
 --
--- TOC entry 2826 (class 2606 OID 59672)
+-- TOC entry 2826 (class 2606 OID 76338)
 -- Name: bibliotheque adresse_bibliotheque_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -810,7 +882,7 @@ ALTER TABLE ONLY public.bibliotheque
 
 
 --
--- TOC entry 2829 (class 2606 OID 59682)
+-- TOC entry 2827 (class 2606 OID 76343)
 -- Name: employe adresse_employe_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -819,7 +891,7 @@ ALTER TABLE ONLY public.employe
 
 
 --
--- TOC entry 2823 (class 2606 OID 42968)
+-- TOC entry 2833 (class 2606 OID 76348)
 -- Name: livre_auteurs auteur_livre_auteurs_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -828,7 +900,7 @@ ALTER TABLE ONLY public.livre_auteurs
 
 
 --
--- TOC entry 2831 (class 2606 OID 43003)
+-- TOC entry 2824 (class 2606 OID 76353)
 -- Name: abonne bibliotheque_abonne_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -837,7 +909,7 @@ ALTER TABLE ONLY public.abonne
 
 
 --
--- TOC entry 2828 (class 2606 OID 43008)
+-- TOC entry 2828 (class 2606 OID 76358)
 -- Name: employe bibliotheque_employe_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -846,7 +918,7 @@ ALTER TABLE ONLY public.employe
 
 
 --
--- TOC entry 2819 (class 2606 OID 59789)
+-- TOC entry 2835 (class 2606 OID 76363)
 -- Name: ouvrage bibliotheque_ouvrage_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -855,7 +927,7 @@ ALTER TABLE ONLY public.ouvrage
 
 
 --
--- TOC entry 2817 (class 2606 OID 51355)
+-- TOC entry 2832 (class 2606 OID 76368)
 -- Name: livre editeur_livre_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -864,7 +936,7 @@ ALTER TABLE ONLY public.livre
 
 
 --
--- TOC entry 2830 (class 2606 OID 42978)
+-- TOC entry 2825 (class 2606 OID 76373)
 -- Name: abonne enumrole_abonne_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -873,7 +945,7 @@ ALTER TABLE ONLY public.abonne
 
 
 --
--- TOC entry 2827 (class 2606 OID 42983)
+-- TOC entry 2829 (class 2606 OID 76378)
 -- Name: employe enumrole_employe_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -882,7 +954,7 @@ ALTER TABLE ONLY public.employe
 
 
 --
--- TOC entry 2825 (class 2606 OID 42973)
+-- TOC entry 2830 (class 2606 OID 76383)
 -- Name: liste_genre genre_liste_genre_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -891,7 +963,7 @@ ALTER TABLE ONLY public.liste_genre
 
 
 --
--- TOC entry 2824 (class 2606 OID 42953)
+-- TOC entry 2831 (class 2606 OID 76388)
 -- Name: liste_genre livre_liste_genre_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -900,7 +972,7 @@ ALTER TABLE ONLY public.liste_genre
 
 
 --
--- TOC entry 2822 (class 2606 OID 42943)
+-- TOC entry 2834 (class 2606 OID 76393)
 -- Name: livre_auteurs livre_livre_auteurs_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -909,7 +981,7 @@ ALTER TABLE ONLY public.livre_auteurs
 
 
 --
--- TOC entry 2818 (class 2606 OID 42948)
+-- TOC entry 2836 (class 2606 OID 76398)
 -- Name: ouvrage livre_ouvrage_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -918,7 +990,16 @@ ALTER TABLE ONLY public.ouvrage
 
 
 --
--- TOC entry 2820 (class 2606 OID 42958)
+-- TOC entry 2840 (class 2606 OID 76425)
+-- Name: abonne_ouvrage_reservation ouvrage_abonne_ouvrage_reservation_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.abonne_ouvrage_reservation
+    ADD CONSTRAINT ouvrage_abonne_ouvrage_reservation_fk FOREIGN KEY (id_ouvrage) REFERENCES public.ouvrage(id_ouvrage);
+
+
+--
+-- TOC entry 2838 (class 2606 OID 76403)
 -- Name: pret ouvrage_pret_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -926,7 +1007,7 @@ ALTER TABLE ONLY public.pret
     ADD CONSTRAINT ouvrage_pret_fk FOREIGN KEY (id_ouvrage) REFERENCES public.ouvrage(id_ouvrage);
 
 
--- Completed on 2021-03-05 14:18:57
+-- Completed on 2021-11-11 11:54:42
 
 --
 -- PostgreSQL database dump complete

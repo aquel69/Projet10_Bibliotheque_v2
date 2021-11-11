@@ -21,35 +21,7 @@ if(arretEffet === false){
     arretEffet = true;
 };
 
-let input = document.querySelector(".input");
 
-
-/*for(i = 0; i < ele.length; i++) {
-    if(ele[i].checked)
-        console.log(ele[i].value);
-}*/
-let button = document.querySelector("#boutonSupprimerReservation");
-console.log("input" + input);
-
-if (document.querySelector(".input").value === "") {
-    button.disabled = true; //button remains disabled
-} else {
-    button.disabled = false; //button is enabled
-}
-console.log(button.disabled);
-
-button.disabled = true;
-
-/*button.disabled = true;
-input.addEventListener("change", stateHandle);
-
-function stateHandle() {
-    if(document.querySelector(".input").value === "") {
-        button.disabled = true;
-    } else {
-        button.disabled = false;
-    }
-}*/
 
 
 

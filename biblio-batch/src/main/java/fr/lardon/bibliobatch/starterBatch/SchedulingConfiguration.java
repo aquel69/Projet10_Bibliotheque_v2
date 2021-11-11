@@ -40,20 +40,11 @@ public class SchedulingConfiguration {
     @Autowired
     private JavaMailSender javaMailSender;
 
-/*    @Autowired
-    private MicroserviceInterfaceProxy microserviceInterfaceProxy;*/
-
     @Autowired
     private DaoAbonnePret daoAbonnePret;
 
     @Autowired
-    private DaoAbonne daoAbonne;
-
-    @Autowired
     private DaoOuvrage daoOuvrage;
-
-    @Autowired
-    private DaoPret daoPret;
 
     @Autowired
     private DaoAbonneOuvrageReservation daoAbonneOuvrageReservation;
@@ -65,7 +56,7 @@ public class SchedulingConfiguration {
     private Configuration freemarkerConfig;
 
     /*@Scheduled(cron = "0 0 0 * * *")*/
-    /*@Scheduled(fixedRate = 90000L)
+    @Scheduled(fixedRate = 90000L)
     public void startBatchEmprunt() throws MessagingException, IOException, TemplateException {
         FreeMarkerConfigurationFactoryBean bean = new FreeMarkerConfigurationFactoryBean();
         bean.setTemplateLoaderPath("/templates/");
@@ -108,9 +99,8 @@ public class SchedulingConfiguration {
             }
         }
         System.out.println("Done");
-    }*/
+    }
 
-    /*@Scheduled(fixedRate = 90000L)*/
     @Scheduled(cron = "*/1 * * * * *")
     public void startBatchReservation() throws MessagingException, IOException, TemplateException{
         FreeMarkerConfigurationFactoryBean bean = new FreeMarkerConfigurationFactoryBean();
@@ -118,12 +108,12 @@ public class SchedulingConfiguration {
         System.out.println("entre dans le batch reservation");
         List<AbonneOuvrageReservation> abonneOuvrageReservationList;
         List<Bibliotheque> bibliothequeList;
-        Bibliotheque bibliothequeDeLOuvrage = new Bibliotheque();
+        Bibliotheque bibliothequeDeLOuvrage;
         Ouvrage ouvrageRestitue;
         Abonne abonne;
-        String nomBibliotheque = null;
         mail = new Mail();
-        LocalDateTime dateTime = LocalDateTime.now().plusSeconds(1000);
+        //ajout des 48h de délai pour récupérer l'ouvrage
+        LocalDateTime dateTime = LocalDateTime.now().plusDays(2);
 
         //récupération, de la liste des bibliothèques
         bibliothequeList = batchController.BibliothequeListe();
@@ -178,9 +168,8 @@ public class SchedulingConfiguration {
 
     }
 
-    /*@Scheduled(fixedRate = 90000L)*/
     @Scheduled(cron = "*/1 * * * * *")
-    public void startSupprimerReservation() throws MessagingException, IOException, TemplateException{
+    public void startSupprimerReservation() {
         List<AbonneOuvrageReservation> abonneOuvrageReservationList;
         LocalDateTime date = LocalDateTime.now();
 
@@ -220,7 +209,4 @@ public class SchedulingConfiguration {
 
         javaMailSender.send(message);
     }
-
-
-
 }
