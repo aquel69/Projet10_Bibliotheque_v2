@@ -59,5 +59,11 @@ public class AbonneOuvrageReservation {
     @Column(name="recupere")
     private boolean ouvrageRecupere;
 
+    /**
+     * position dans la file d'attente des réservation de l'ouvrage
+     */
+    @Column(name="position_reservation")
+    private int positionAttente;
+
 
 }
