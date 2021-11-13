@@ -106,7 +106,7 @@ public class EmployeController {
         pret.setProlongation(false);
         pret.setOuvragePret(this.ouvrage);
         pret.setAbonnePret(this.abonne);
-        pret.setStatut("non prolongé");
+        pret.setStatut("Prêt en cours");
 
         //reajustement du nombre d'exemplaires et sauvegarde de l'ouvrage
         if(this.ouvrage.getNombreExemplaires() > 0) {

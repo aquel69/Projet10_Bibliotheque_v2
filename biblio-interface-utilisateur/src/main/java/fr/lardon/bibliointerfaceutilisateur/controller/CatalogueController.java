@@ -203,7 +203,7 @@ public class CatalogueController {
             //récupération de l'abonné qui vient d'être supprimé
             abonneSupprime = livresProxy.AbonneOuvrageReservationSelonId(supprimerReservation);
 
-            //à partir de l'abonné supprimé, on récupère la liste des des réservations restantes
+            //à partir de l'abonné supprimé, on récupère la liste des réservations restantes
             abonneOuvrageReservationList = livresProxy.listeReservationSelonOuvrage
                     (abonneSupprime.getOuvrageReservation().getIdOuvrage()
                             , abonneSupprime.getOuvrageReservation().getNombreExemplairesTotal() * 2);
@@ -215,18 +215,17 @@ public class CatalogueController {
 
                     livresProxy.modifierAbonneReservation(abonneModifie);
                }
-
-                //ajout du dernier numéo d'ouvrage dans la table bibliotheque de la base de donnée
-                bibliotheque = livresProxy.bibliothequeSelonOuvrage(abonneOuvrageReservationList.get(0).getOuvrageReservation().getIdOuvrage());
-                bibliotheque.setDernierOuvrageRestitue(abonneOuvrageReservationList.get(0).getOuvrageReservation().getIdOuvrage());
-                bibliotheque.setNouveauDernierOuvrage(true);
-                livresProxy.modifierBibliotheque(bibliotheque);
+                if ( abonneSupprime.isOuvrageRecupere() == true) {
+                    //ajout du dernier numéo d'ouvrage dans la table bibliotheque de la base de donnée
+                    bibliotheque = livresProxy.bibliothequeSelonOuvrage(abonneOuvrageReservationList.get(0).getOuvrageReservation().getIdOuvrage());
+                    bibliotheque.setDernierOuvrageRestitue(abonneOuvrageReservationList.get(0).getOuvrageReservation().getIdOuvrage());
+                    bibliotheque.setNouveauDernierOuvrage(true);
+                    livresProxy.modifierBibliotheque(bibliotheque);
+                }
            }
 
             //réservation supprimée
             livresProxy.supprimerReservation(supprimerReservation);
-
-
 
             //ajout du message
             message = "La réservation est supprimé";

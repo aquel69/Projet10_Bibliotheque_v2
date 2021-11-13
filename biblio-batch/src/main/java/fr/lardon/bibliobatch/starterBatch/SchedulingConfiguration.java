@@ -113,7 +113,8 @@ public class SchedulingConfiguration {
         Abonne abonne;
         mail = new Mail();
         //ajout des 48h de délai pour récupérer l'ouvrage
-        LocalDateTime dateTime = LocalDateTime.now().plusDays(2);
+        /*LocalDateTime dateTime = LocalDateTime.now().plusDays(2);*/
+        LocalDateTime dateTime = LocalDateTime.now().plusSeconds(30);
 
         //récupération, de la liste des bibliothèques
         bibliothequeList = batchController.BibliothequeListe();
@@ -172,7 +173,7 @@ public class SchedulingConfiguration {
     public void startSupprimerReservation() {
         List<AbonneOuvrageReservation> abonneOuvrageReservationList;
         LocalDateTime date = LocalDateTime.now();
-
+        AbonneOuvrageReservationAModifie abonneModifie = new AbonneOuvrageReservationAModifie();
         abonneOuvrageReservationList = batchController.listeReservationTotale();
 
         for (AbonneOuvrageReservation abonneOuvrageReservation : abonneOuvrageReservationList){
@@ -186,7 +187,15 @@ public class SchedulingConfiguration {
                        (ouvrageBoucle.getIdOuvrage(), ouvrageBoucle.getNombreExemplairesTotal() * 2);
 
                 if (abonneOuvrageReservationListBoucle.size() != 0){
-                   idDernierOuvrageRestitue = ouvrageBoucle.getIdOuvrage();
+                    //envoi du dernier ouvrage pour envoi mail à l'abonné suivant dans la file d'attente
+                    idDernierOuvrageRestitue = ouvrageBoucle.getIdOuvrage();
+                    //modification de la position dans la file d'attente
+                    for (AbonneOuvrageReservation abonneOuvrageReservationBoucle : abonneOuvrageReservationListBoucle) {
+                        abonneModifie.setIdAbonneOuvrageReservation(abonneOuvrageReservationBoucle.getIdAbonneOuvrageReservation());
+                        abonneModifie.setPositionAttente(abonneOuvrageReservationBoucle.getPositionAttente() - 1);
+
+                        batchController.modifierAbonneReservation(abonneModifie);
+                    }
                 }
             }
         }
